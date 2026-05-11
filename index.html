@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>THE DECK // DAILY BRAND BUILD</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Special+Elite&family=VT323&family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #f0e9d6;
+    --bg-dark: #1a1a1a;
+    --ink: #1a1a1a;
+    --paper: #ede4c8;
+    --red: #c0392b;
+    --blue: #2c5f7e;
+    --yellow: #e8c547;
+    --green: #5a7a3e;
+    --muted: #8a8270;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Special Elite', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* HALFTONE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.12) 1px, transparent 1.2px);
+    background-size: 5px 5px;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+
+  /* GRAIN/NOISE */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    background: var(--bg-dark);
+    color: var(--bg);
+    padding: 1.2rem 1rem 1.4rem;
+    text-align: center;
+    z-index: 2;
+    border-bottom: 4px solid var(--red);
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.025) 20px, rgba(255,255,255,0.025) 22px);
+    pointer-events: none;
+  }
+
+  .logo {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-shadow: 3px 3px 0 var(--red);
+    transform: rotate(-1deg);
+    display: inline-block;
+  }
+
+  .tag-line {
+    font-family: 'VT323', monospace;
+    color: var(--yellow);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    color: rgba(240,233,214,0.6);
+    margin-top: 0.8rem;
+    padding: 0 0.5rem;
+  }
+
+  .rec-dot {
+    color: var(--red);
+  }
+  .rec-dot::before {
+    content: '●';
+    margin-right: 0.3em;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.3; } }
+
+  /* TAB NAV */
+  .tabs {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-dark);
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 3px solid var(--ink);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex: 1;
+    min-width: 80px;
+    background: var(--bg-dark);
+    color: rgba(240,233,214,0.5);
+    border: none;
+    padding: 0.9rem 0.6rem;
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.72rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .tab.active {
+    color: var(--yellow);
+    background: var(--ink);
+    border-bottom: 3px solid var(--red);
+    margin-bottom: -3px;
+  }
+
+  .tab:hover { color: var(--bg); }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 2;
+    padding: 1.2rem 1rem 5rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.25s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HERO STATS */
+  .hero {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 1.2rem;
+    margin-bottom: 1.4rem;
+    transform: rotate(-0.4deg);
+  }
+
+  .hero h2 {
+    font-family: 'Bungee', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.01em;
+  }
+
+  .countdown {
+    font-family: 'Bungee', sans-serif;
+    font-size: 3.2rem;
+    line-height: 1;
+    color: var(--red);
+    text-shadow: 4px 4px 0 var(--ink);
+    text-align: center;
+    margin: 0.8rem 0;
+  }
+
+  .countdown-label {
+    font-family: 'VT323', monospace;
+    text-align: center;
+    color: var(--muted);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.4rem;
+  }
+
+  .launch-input-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+    align-items: stretch;
+  }
+
+  .launch-input-row input[type="date"] {
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    border: 2px solid var(--ink);
+    background: var(--bg);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.95rem;
+    color: var(--ink);
+    border-radius: 0;
+  }
+
+  .launch-input-row button {
+    background: var(--ink);
+    color: var(--bg);
+    border: 2px solid var(--ink);
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.8rem;
+    padding: 0 0.9rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .launch-input-row button:hover { background: var(--red); border-color: var(--red); }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-family: 'Bungee', sans-serif;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    margin: 1.2rem 0 0.8rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  .section-subtitle {
+    font-family: 'VT323', monospace;
+    color: var(--red);
+    text-transform: uppercase;
+    font-size: 1.05rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    padding: 1rem 1rem 0.6rem;
+    margin-bottom: 1.2rem;
+    position: relative;
+  }
+
+  .card.tilt-l { transform: rotate(-0.3deg); }
+  .card.tilt-r { transform: rotate(0.3deg); box-shadow: -5px 5px 0 var(--ink); }
+
+  .card h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+
+  .card-stamp {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--red);
+    color: var(--bg);
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    text-transform: uppercase;
+    transform: rotate(2deg);
+    letter-spacing: 0.05em;
+  }
+  .card-stamp.blue { background: var(--blue); }
+  .card-stamp.green { background: var(--green); }
+
+  /* CHECKLIST */
+  .check-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.55rem 0;
+    border-bottom: 1.5px dashed rgba(26,26,26,0.18);
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s;
+  }
+  .check-item:last-child { border-bottom: none; }
+
+  .check-box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 2.5px solid var(--ink);
+    background: var(--bg);
+    margin-top: 1px;
+    position: relative;
+    transition: all 0.15s;
+  }
+
+  .check-item.done .check-box {
+    background: var(--ink);
+  }
+
+  .check-item.done .check-box::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    color: var(--yellow);
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .check-text {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: all 0.2s;
+  }
+
+  .check-item.done .check-text {
+    text-decoration: line-through;
+    opacity: 0.45;
+  }
+
+  .check-sub {
+    display: block;
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+    text-decoration: none !important;
+    opacity: 1 !important;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: var(--ink);
+    height: 18px;
+    margin: 0.6rem 0 0.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    background: linear-gradient(90deg, var(--red), var(--yellow));
+    height: 100%;
+    transition: width 0.4s;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(0,0,0,0.15) 4px, rgba(0,0,0,0.15) 6px);
+  }
+
+  .progress-text {
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* NOTES TEXTAREA */
+  textarea.brain-dump {
+    width: 100%;
+    min-height: 180px;
+    padding: 0.9rem;
+    border: 2.5px solid var(--ink);
+    background: var(--bg);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.95rem;
+    color: var(--ink);
+    resize: vertical;
+    line-height: 1.5;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  textarea.brain-dump:focus { outline: none; border-color: var(--red); }
+
+  .save-msg {
+    font-family: 'VT323', monospace;
+    color: var(--green);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .save-msg.show { opacity: 1; }
+
+  /* RULES / QUOTES */
+  .rule {
+    border-left: 6px solid var(--red);
+    padding: 0.8rem 0 0.8rem 1rem;
+    margin: 0.8rem 0;
+    background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .rule-num {
+    font-family: 'Bungee', sans-serif;
+    color: var(--red);
+    font-size: 1.4rem;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+    display: inline-block;
+  }
+
+  .rule-text {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .rule-sub {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+    line-height: 1.4;
+  }
+
+  /* SPECS / PRINT INFO */
+  .spec-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0.6rem;
+    padding: 0.55rem 0;
+    border-bottom: 1.5px dashed rgba(26,26,26,0.2);
+    font-size: 0.9rem;
+    align-items: start;
+  }
+  .spec-row:last-child { border-bottom: none; }
+
+  .spec-key {
+    font-family: 'Bungee', sans-serif;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--red);
+    letter-spacing: 0.03em;
+    padding-top: 2px;
+  }
+
+  /* PHONE SCRIPT */
+  .script-box {
+    border: 2.5px solid var(--ink);
+    background: var(--bg);
+    padding: 0.9rem 1rem;
+    margin: 0.6rem 0;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    box-shadow: 4px 4px 0 var(--ink);
+    font-style: italic;
+    position: relative;
+  }
+
+  .script-box::before {
+    content: '"';
+    position: absolute;
+    top: -18px;
+    left: 8px;
+    font-family: 'Bungee', sans-serif;
+    font-size: 2.5rem;
+    color: var(--red);
+    line-height: 1;
+  }
+
+  /* MILESTONE PILLS */
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.6rem 0;
+  }
+
+  .pill {
+    font-family: 'Bungee', sans-serif;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.3rem 0.7rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 2px solid var(--ink);
+    cursor: pointer;
+  }
+  .pill.complete {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  /* DAILY PROMPTS */
+  .prompt-box {
+    background: var(--yellow);
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    transform: rotate(-0.5deg);
+  }
+
+  .prompt-label {
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    margin-bottom: 0.4rem;
+  }
+
+  .prompt-text {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .reroll-btn {
+    background: var(--ink);
+    color: var(--yellow);
+    border: none;
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.5rem;
+  }
+
+  /* LINKS */
+  a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+  }
+
+  a:hover { color: var(--red); }
+
+  /* RESET BUTTON */
+  .reset-row {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px dashed var(--muted);
+    text-align: center;
+  }
+
+  .reset-btn {
+    background: transparent;
+    color: var(--muted);
+    border: 2px dashed var(--muted);
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .reset-btn:hover { color: var(--red); border-color: var(--red); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 1.5rem 1rem 2rem;
+    font-family: 'VT323', monospace;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* TIPS / CALLOUTS */
+  .tip {
+    background: var(--bg-dark);
+    color: var(--bg);
+    padding: 0.8rem 1rem;
+    margin: 0.8rem 0;
+    border-left: 6px solid var(--yellow);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .tip strong { color: var(--yellow); font-family: 'Bungee', sans-serif; }
+
+  /* DAILY STREAK */
+  .streak-row {
+    display: flex;
+    justify-content: space-around;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.7rem;
+    margin: 0.8rem 0 1.2rem;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--red);
+  }
+
+  .streak-stat { text-align: center; }
+  .streak-num {
+    font-family: 'Bungee', sans-serif;
+    font-size: 1.6rem;
+    color: var(--yellow);
+    line-height: 1;
+  }
+  .streak-label {
+    font-family: 'VT323', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(240,233,214,0.7);
+    margin-top: 0.3rem;
+  }
+
+  /* RESPONSIVE TIGHTENING */
+  @media (max-width: 380px) {
+    .spec-row { grid-template-columns: 90px 1fr; }
+    .countdown { font-size: 2.6rem; }
+    .tab { font-size: 0.65rem; padding: 0.8rem 0.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">THE DECK</div>
+  <div class="tag-line">/// DAILY BRAND BUILD ///</div>
+  <div class="meta-bar">
+    <span class="rec-dot" id="recLabel">REC</span>
+    <span id="dateLabel">--</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabNav">
+  <button class="tab active" data-section="home">Home</button>
+  <button class="tab" data-section="today">Today</button>
+  <button class="tab" data-section="camera">Camera</button>
+  <button class="tab" data-section="brand">Brand</button>
+  <button class="tab" data-section="print">Print</button>
+  <button class="tab" data-section="rules">Rules</button>
+  <button class="tab" data-section="notes">Notes</button>
+</nav>
+
+<main>
+
+  <!-- ====== HOME ====== -->
+  <section class="section active" data-section="home">
+    <div class="hero">
+      <div class="countdown-label">Days To Drop</div>
+      <div class="countdown" id="countdownDays">--</div>
+      <div class="launch-input-row">
+        <input type="date" id="launchDateInput" />
+        <button id="setLaunchBtn">Set</button>
+      </div>
+      <div style="font-family:'VT323',monospace;font-size:0.85rem;color:var(--muted);margin-top:0.5rem;text-align:center;text-transform:uppercase;letter-spacing:0.1em;" id="launchDateDisplay">No launch date set yet</div>
+    </div>
+
+    <div class="streak-row">
+      <div class="streak-stat">
+        <div class="streak-num" id="streakDays">0</div>
+        <div class="streak-label">Day Streak</div>
+      </div>
+      <div class="streak-stat">
+        <div class="streak-num" id="totalChecks">0</div>
+        <div class="streak-label">Tasks Done</div>
+      </div>
+      <div class="streak-stat">
+        <div class="streak-num" id="totalDays">0</div>
+        <div class="streak-label">Active Days</div>
+      </div>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-label">Daily Mission</div>
+      <div class="prompt-text" id="dailyPrompt">Loading...</div>
+      <button class="reroll-btn" id="rerollBtn">Re-Roll</button>
+    </div>
+
+    <h2 class="section-title">The Big Three</h2>
+    <div class="section-subtitle">Move at least one every day</div>
+
+    <div class="card tilt-l">
+      <span class="card-stamp">Camera</span>
+      <h3>Film Something</h3>
+      <ul class="check-list" data-checklist="bigthree-camera">
+        <li class="check-item" data-id="bt-cam-1">
+          <div class="check-box"></div>
+          <div class="check-text">Test the VX1000 + Powerplay end-to-end<span class="check-sub">Record, transfer, verify SD card workflow</span></div>
+        </li>
+        <li class="check-item" data-id="bt-cam-2">
+          <div class="check-box"></div>
+          <div class="check-text">Shoot 10 minutes of B-roll<span class="check-sub">Hands, friends, parking lots, anything</span></div>
+        </li>
+        <li class="check-item" data-id="bt-cam-3">
+          <div class="check-box"></div>
+          <div class="check-text">Edit one 30-second clip<span class="check-sub">CapCut, vertical, lo-fi music</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card tilt-r">
+      <span class="card-stamp blue">Design</span>
+      <h3>Make Something</h3>
+      <ul class="check-list" data-checklist="bigthree-design">
+        <li class="check-item" data-id="bt-dgn-1">
+          <div class="check-box"></div>
+          <div class="check-text">Sketch in Procreate (15 min minimum)<span class="check-sub">Halftones, wavy type, hand-drawn</span></div>
+        </li>
+        <li class="check-item" data-id="bt-dgn-2">
+          <div class="check-box"></div>
+          <div class="check-text">Add 5 references to Pinterest archive<span class="check-sub">Sundek, Birdwell, Ocean Pacific, vintage surf</span></div>
+        </li>
+        <li class="check-item" data-id="bt-dgn-3">
+          <div class="check-box"></div>
+          <div class="check-text">Brainstorm 5 new brand names<span class="check-sub">Hyper-local Jax / last name / inside joke</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card tilt-l">
+      <span class="card-stamp green">Move</span>
+      <h3>Talk To Someone</h3>
+      <ul class="check-list" data-checklist="bigthree-talk">
+        <li class="check-item" data-id="bt-tlk-1">
+          <div class="check-box"></div>
+          <div class="check-text">Call/visit one local printer<span class="check-sub">Stephens, MLXL, or another verified shop</span></div>
+        </li>
+        <li class="check-item" data-id="bt-tlk-2">
+          <div class="check-box"></div>
+          <div class="check-text">DM/show work to 1 person whose taste you trust<span class="check-sub">Friend, local shop kid, older skater</span></div>
+        </li>
+        <li class="check-item" data-id="bt-tlk-3">
+          <div class="check-box"></div>
+          <div class="check-text">Visit one local surf/skate shop<span class="check-sub">Sunrise, Aqua East, Sun Dog</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tip">
+      <strong>Movement creates clarity.</strong> One real action beats five hours of planning. If you only do one thing today, make it the action — not the plan.
+    </div>
+  </section>
+
+  <!-- ====== TODAY ====== -->
+  <section class="section" data-section="today">
+    <h2 class="section-title">Today's Checklist</h2>
+    <div class="section-subtitle">Reset every morning</div>
+
+    <div class="card tilt-l">
+      <h3>The Daily Five</h3>
+      <ul class="check-list" data-checklist="daily" data-daily="true">
+        <li class="check-item" data-id="d-1">
+          <div class="check-box"></div>
+          <div class="check-text">Open the paper notebook<span class="check-sub">Write one idea, sketch, or observation</span></div>
+        </li>
+        <li class="check-item" data-id="d-2">
+          <div class="check-box"></div>
+          <div class="check-text">Shoot something with the VX<span class="check-sub">Even 60 seconds counts</span></div>
+        </li>
+        <li class="check-item" data-id="d-3">
+          <div class="check-box"></div>
+          <div class="check-text">Sketch or design in Procreate<span class="check-sub">15 min minimum, no editing yet</span></div>
+        </li>
+        <li class="check-item" data-id="d-4">
+          <div class="check-box"></div>
+          <div class="check-text">Watch one piece of brand inspiration<span class="check-sub">Skate part, brand mini-doc, Seaggs video</span></div>
+        </li>
+        <li class="check-item" data-id="d-5">
+          <div class="check-box"></div>
+          <div class="check-text">Do one move that pushes the brand<span class="check-sub">A call, a post, a meet, a sample, a decision</span></div>
+        </li>
+      </ul>
+      <div class="progress-wrap"><div class="progress-fill" id="dailyProgress" style="width: 0%;"></div></div>
+      <div class="progress-text" id="dailyProgressText">0 / 5</div>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-label">If You're Stuck</div>
+      <div class="prompt-text" id="stuckPrompt">Pick up the camera and walk outside.</div>
+      <button class="reroll-btn" id="stuckReroll">Re-Roll</button>
+    </div>
+
+    <h2 class="section-title">Week 1 with VX</h2>
+    <div class="section-subtitle">After the box arrives</div>
+
+    <div class="card tilt-r">
+      <h3>Unboxing Day</h3>
+      <ul class="check-list" data-checklist="week1-unbox">
+        <li class="check-item" data-id="w1-1">
+          <div class="check-box"></div>
+          <div class="check-text">Save eBay receipt as PDF</div>
+        </li>
+        <li class="check-item" data-id="w1-2">
+          <div class="check-box"></div>
+          <div class="check-text">Film the unboxing (Reels content)</div>
+        </li>
+        <li class="check-item" data-id="w1-3">
+          <div class="check-box"></div>
+          <div class="check-text">Test record + playback to SD card</div>
+        </li>
+        <li class="check-item" data-id="w1-4">
+          <div class="check-box"></div>
+          <div class="check-text">Test fisheye attachment</div>
+        </li>
+        <li class="check-item" data-id="w1-5">
+          <div class="check-box"></div>
+          <div class="check-text">Verify all batteries hold charge</div>
+        </li>
+        <li class="check-item" data-id="w1-6">
+          <div class="check-box"></div>
+          <div class="check-text">Note the 60-day warranty start date</div>
+        </li>
+        <li class="check-item" data-id="w1-7">
+          <div class="check-box"></div>
+          <div class="check-text">Submit PEP reimbursement in EMA</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card tilt-l">
+      <h3>First Real Shoot</h3>
+      <ul class="check-list" data-checklist="week1-shoot">
+        <li class="check-item" data-id="w1s-1">
+          <div class="check-box"></div>
+          <div class="check-text">Go to Kona, Ed Austin, or local skate spot</div>
+        </li>
+        <li class="check-item" data-id="w1s-2">
+          <div class="check-box"></div>
+          <div class="check-text">Shoot 3+ tricks from low angles</div>
+        </li>
+        <li class="check-item" data-id="w1s-3">
+          <div class="check-box"></div>
+          <div class="check-text">Shoot 10 lifestyle B-roll clips (no tricks)</div>
+        </li>
+        <li class="check-item" data-id="w1s-4">
+          <div class="check-box"></div>
+          <div class="check-text">Transfer footage to Mac</div>
+        </li>
+        <li class="check-item" data-id="w1s-5">
+          <div class="check-box"></div>
+          <div class="check-text">Watch playback. What worked? What didn't?</div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====== CAMERA ====== -->
+  <section class="section" data-section="camera">
+    <h2 class="section-title">The VX Manual</h2>
+    <div class="section-subtitle">How to actually film</div>
+
+    <div class="card tilt-l">
+      <h3>The Mechanics</h3>
+      <div class="spec-row"><div class="spec-key">Crouch</div><div>Low angles equal power. Phone at knee height or lower.</div></div>
+      <div class="spec-row"><div class="spec-key">Lock Focus</div><div>Before the trick. Manual focus on the wheels.</div></div>
+      <div class="spec-row"><div class="spec-key">No Zoom</div><div>Mid-clip. Ever. Crop in editing instead.</div></div>
+      <div class="spec-row"><div class="spec-key">Follow Knees</div><div>Smooth motion from legs, not arms. Locked elbows.</div></div>
+      <div class="spec-row"><div class="spec-key">Get Close</div><div>Then closer. The fisheye lies about distance.</div></div>
+      <div class="spec-row"><div class="spec-key">Audio</div><div>Wheels, slap of the board, ambient sound. Half the magic.</div></div>
+    </div>
+
+    <div class="card tilt-r">
+      <h3>What To Shoot</h3>
+      <div class="spec-row"><div class="spec-key">Lifestyle</div><div>Hands fixing griptape. Friends laughing. The drive.</div></div>
+      <div class="spec-row"><div class="spec-key">In Between</div><div>Brands live in the moments between tricks.</div></div>
+      <div class="spec-row"><div class="spec-key">Long Takes</div><div>Don't cut every 3 seconds. Let it breathe.</div></div>
+      <div class="spec-row"><div class="spec-key">Many Tries</div><div>Good clip = 17th attempt, not the 3rd.</div></div>
+      <div class="spec-row"><div class="spec-key">Local Spots</div><div>Jax/St. Johns is your lookbook. Use it.</div></div>
+    </div>
+
+    <h2 class="section-title">Local Spots</h2>
+    <div class="section-subtitle">Where to point the lens</div>
+
+    <div class="card tilt-l">
+      <h3>Skate</h3>
+      <ul class="check-list" data-checklist="spots-skate">
+        <li class="check-item" data-id="sk-1"><div class="check-box"></div><div class="check-text">Kona Skatepark</div></li>
+        <li class="check-item" data-id="sk-2"><div class="check-box"></div><div class="check-text">Ed Austin Skatepark</div></li>
+        <li class="check-item" data-id="sk-3"><div class="check-box"></div><div class="check-text">Atlantic Beach side streets</div></li>
+        <li class="check-item" data-id="sk-4"><div class="check-box"></div><div class="check-text">Parking garages downtown (golden hour)</div></li>
+        <li class="check-item" data-id="sk-5"><div class="check-box"></div><div class="check-text">Empty lots with curbs near 3rd St</div></li>
+      </ul>
+    </div>
+
+    <div class="card tilt-r">
+      <h3>Surf / Water / Vibes</h3>
+      <ul class="check-list" data-checklist="spots-vibe">
+        <li class="check-item" data-id="vb-1"><div class="check-box"></div><div class="check-text">Jax Beach Pier</div></li>
+        <li class="check-item" data-id="vb-2"><div class="check-box"></div><div class="check-text">The Poles</div></li>
+        <li class="check-item" data-id="vb-3"><div class="check-box"></div><div class="check-text">Hanna Park</div></li>
+        <li class="check-item" data-id="vb-4"><div class="check-box"></div><div class="check-text">Vilano Beach jetty</div></li>
+        <li class="check-item" data-id="vb-5"><div class="check-box"></div><div class="check-text">A1A at golden hour</div></li>
+        <li class="check-item" data-id="vb-6"><div class="check-box"></div><div class="check-text">Mayport ferry</div></li>
+        <li class="check-item" data-id="vb-7"><div class="check-box"></div><div class="check-text">Huguenot dunes</div></li>
+        <li class="check-item" data-id="vb-8"><div class="check-box"></div><div class="check-text">Old Florida diners (parking lots)</div></li>
+      </ul>
+    </div>
+
+    <div class="tip">
+      <strong>Pro tip:</strong> Cross spots off as you hit them. Goal isn't to film every spot once — it's to find your three that you keep returning to and make iconic.
+    </div>
+  </section>
+
+  <!-- ====== BRAND ====== -->
+  <section class="section" data-section="brand">
+    <h2 class="section-title">Name The Brand</h2>
+    <div class="section-subtitle">30 candidates, then the gauntlet</div>
+
+    <div class="card tilt-l">
+      <h3>The Four Methods</h3>
+      <div class="spec-row">
+        <div class="spec-key">Local</div>
+        <div><strong>Your strongest play.</strong> Mayport, The Poles, Hanna Park, Vilano, Ponte Vedra Inlet, Huguenot, Talbot, Mickler's, A1A, Guana, St. Johns Bar Pilots.</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">Last Name + Craft</div>
+        <div>Birdwell, Hobie, Stüssy. Your last name + Mfg Co. / Dry Goods / Surfboards / Trading Co.</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">Noun + State</div>
+        <div>Quiet Life, Mad Circle, Ocean Pacific. Sun, Salt, Wave, Drift + offbeat adjective.</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">Inside Joke</div>
+        <div>Pig City, Toy Machine, Sex Wax. Slang only you and your friends use.</div>
+      </div>
+    </div>
+
+    <div class="card tilt-r">
+      <h3>The Gauntlet</h3>
+      <div class="section-subtitle" style="margin-bottom: 0.5rem;">Top 5 names get all 4 checks</div>
+      <ul class="check-list" data-checklist="gauntlet">
+        <li class="check-item" data-id="g-1"><div class="check-box"></div><div class="check-text">.com domain available<span class="check-sub">Don't settle for .co or hyphens</span></div></li>
+        <li class="check-item" data-id="g-2"><div class="check-box"></div><div class="check-text">Instagram handle clean<span class="check-sub">No underscores, no numbers</span></div></li>
+        <li class="check-item" data-id="g-3"><div class="check-box"></div><div class="check-text">TikTok handle clean<span class="check-sub">Same standard as IG</span></div></li>
+        <li class="check-item" data-id="g-4"><div class="check-box"></div><div class="check-text">USPTO search clear<span class="check-sub"><a href="https://www.uspto.gov/trademarks/search" target="_blank" rel="noopener">uspto.gov/trademarks/search</a></span></div></li>
+        <li class="check-item" data-id="g-5"><div class="check-box"></div><div class="check-text">Google "[name] clothing" empty<span class="check-sub">Common-law trademark check</span></div></li>
+      </ul>
+    </div>
+
+    <h2 class="section-title">The 90-Day Plan</h2>
+    <div class="section-subtitle">Big milestones</div>
+
+    <div class="card tilt-l">
+      <h3>Month 1 — Foundation</h3>
+      <ul class="check-list" data-checklist="m1">
+        <li class="check-item" data-id="m1-1"><div class="check-box"></div><div class="check-text">Tech stack ordered<span class="check-sub">MacBook, iPad, Procreate, Adobe CC</span></div></li>
+        <li class="check-item" data-id="m1-2"><div class="check-box"></div><div class="check-text">Paper notebook started, carried daily</div></li>
+        <li class="check-item" data-id="m1-3"><div class="check-box"></div><div class="check-text">Pinterest archive: 200+ vintage references</div></li>
+        <li class="check-item" data-id="m1-4"><div class="check-box"></div><div class="check-text">5 graphic sketches in Procreate</div></li>
+        <li class="check-item" data-id="m1-5"><div class="check-box"></div><div class="check-text">Brand name locked + handles claimed</div></li>
+        <li class="check-item" data-id="m1-6"><div class="check-box"></div><div class="check-text">First sketch posted to friends</div></li>
+      </ul>
+    </div>
+
+    <div class="card tilt-r">
+      <h3>Month 2 — Art &amp; The Deal</h3>
+      <ul class="check-list" data-checklist="m2">
+        <li class="check-item" data-id="m2-1"><div class="check-box"></div><div class="check-text">1-2 hero graphics finalized</div></li>
+        <li class="check-item" data-id="m2-2"><div class="check-box"></div><div class="check-text">Tech pack built (Pantone, sizing, placement)</div></li>
+        <li class="check-item" data-id="m2-3"><div class="check-box"></div><div class="check-text">Local printers called + visited</div></li>
+        <li class="check-item" data-id="m2-4"><div class="check-box"></div><div class="check-text">Press proof approved</div></li>
+        <li class="check-item" data-id="m2-5"><div class="check-box"></div><div class="check-text">36-shirt run placed</div></li>
+      </ul>
+    </div>
+
+    <div class="card tilt-l">
+      <h3>Month 3 — Drop &amp; Streets</h3>
+      <ul class="check-list" data-checklist="m3">
+        <li class="check-item" data-id="m3-1"><div class="check-box"></div><div class="check-text">Lookbook shoot at 3+ local spots</div></li>
+        <li class="check-item" data-id="m3-2"><div class="check-box"></div><div class="check-text">36 shirts received, every one inspected</div></li>
+        <li class="check-item" data-id="m3-3"><div class="check-box"></div><div class="check-text">Shopify (or alt) store built</div></li>
+        <li class="check-item" data-id="m3-4"><div class="check-box"></div><div class="check-text">Build-in-public content posted</div></li>
+        <li class="check-item" data-id="m3-5"><div class="check-box"></div><div class="check-text">DROP LIVE</div></li>
+        <li class="check-item" data-id="m3-6"><div class="check-box"></div><div class="check-text">Shirts hand-delivered to local shops</div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====== PRINT ====== -->
+  <section class="section" data-section="print">
+    <h2 class="section-title">Print Specs</h2>
+    <div class="section-subtitle">Non-negotiable when you call printers</div>
+
+    <div class="card tilt-l">
+      <h3>The Specs</h3>
+      <div class="spec-row"><div class="spec-key">Blank</div><div><strong>Comfort Colors 1717.</strong> Backups: AS Colour Faded, LA Apparel 1801GD.</div></div>
+      <div class="spec-row"><div class="spec-key">Method</div><div><strong>Discharge printing</strong> (preferred) or water-based ink.</div></div>
+      <div class="spec-row"><div class="spec-key">Avoid</div><div>Plastisol ink. DTG (direct-to-garment).</div></div>
+      <div class="spec-row"><div class="spec-key">Palette</div><div>Washed seafoam, mustard, faded pepper gray, dusty blue, bone, washed crimson.</div></div>
+      <div class="spec-row"><div class="spec-key">First Run</div><div>36 shirts. Pay personal $$$, not PEP funds.</div></div>
+    </div>
+
+    <h2 class="section-title">The Phone Script</h2>
+    <div class="section-subtitle">Read it. Memorize it. Dial.</div>
+
+    <div class="script-box">
+      Hey, I'm working on a small brand and putting together a 36-piece run. I want to use Comfort Colors 1717 blanks and I need water-based or discharge ink — not plastisol. Do you handle that, and what's your minimum? Also, which Comfort Colors washes have you had the best discharge results on?
+    </div>
+
+    <div class="tip">
+      <strong>First call will feel awkward.</strong> By the third you'll sound like you know what you're doing. Just dial.
+    </div>
+
+    <h2 class="section-title">Local Printers</h2>
+    <div class="section-subtitle">Verify yourself before calling</div>
+
+    <div class="card tilt-l">
+      <h3>Printer Calls</h3>
+      <ul class="check-list" data-checklist="printers">
+        <li class="check-item" data-id="p-1">
+          <div class="check-box"></div>
+          <div class="check-text">Stephens Advertising (Jacksonville)<span class="check-sub">Reportedly does water-based + discharge. First call.</span></div>
+        </li>
+        <li class="check-item" data-id="p-2">
+          <div class="check-box"></div>
+          <div class="check-text">MLXL (Jacksonville)<span class="check-sub">Modern production house, water-based ink</span></div>
+        </li>
+        <li class="check-item" data-id="p-3">
+          <div class="check-box"></div>
+          <div class="check-text">B&amp;B Screenprinting (Winter Park)<span class="check-sub">Backup. Discharge, 24-piece minimum. 2hr drive.</span></div>
+        </li>
+        <li class="check-item" data-id="p-4">
+          <div class="check-box"></div>
+          <div class="check-text">Visit the shop in person<span class="check-sub">Touch sample discharge prints before committing</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <h2 class="section-title">Local Retail</h2>
+    <div class="section-subtitle">Bypass the internet for Drop 1</div>
+
+    <div class="card tilt-r">
+      <h3>Shops to Walk Into</h3>
+      <ul class="check-list" data-checklist="retail">
+        <li class="check-item" data-id="r-1"><div class="check-box"></div><div class="check-text">Sunrise Surf Shop (Jax Beach)</div></li>
+        <li class="check-item" data-id="r-2"><div class="check-box"></div><div class="check-text">Aqua East Surf Shop</div></li>
+        <li class="check-item" data-id="r-3"><div class="check-box"></div><div class="check-text">Sun Dog (Atlantic Beach)</div></li>
+        <li class="check-item" data-id="r-4"><div class="check-box"></div><div class="check-text">Local skate shops near Kona</div></li>
+        <li class="check-item" data-id="r-5"><div class="check-box"></div><div class="check-text">Independent coffee shops Jax/Atlantic/Neptune</div></li>
+      </ul>
+    </div>
+
+    <div class="tip">
+      <strong>Don't pitch — introduce yourself.</strong> Give a few free shirts to the coolest employees on shift. Tell your story.
+    </div>
+  </section>
+
+  <!-- ====== RULES ====== -->
+  <section class="section" data-section="rules">
+    <h2 class="section-title">Golden Rules</h2>
+    <div class="section-subtitle">Read every Monday</div>
+
+    <div class="rule">
+      <div class="rule-num">01</div>
+      <div class="rule-text">Movement creates clarity.</div>
+      <div class="rule-sub">You'll learn more from 36 flawed shirts than from 6 months of planning the perfect drop. Action beats theory every time.</div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-num">02</div>
+      <div class="rule-text">The calls will be awkward.</div>
+      <div class="rule-sub">Script it. Accept the awkwardness. Dial anyway. By the third shop you'll sound like a pro.</div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-num">03</div>
+      <div class="rule-text">Document everything.</div>
+      <div class="rule-sub">The paper notebook. The receipts. The printer conversations. In 5 years, win or lose, that notebook will be one of the most valuable things you own.</div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-num">04</div>
+      <div class="rule-text">Authenticity beats polish.</div>
+      <div class="rule-sub">Skate and surf culture respect effort and realness over corporate finish. Lo-fi is the point.</div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-num">05</div>
+      <div class="rule-text">Permission to walk away.</div>
+      <div class="rule-sub">If a printer pushes plastisol or DTG, a name is taken, or a vendor doesn't take you seriously — walk. The right ones exist.</div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-num">06</div>
+      <div class="rule-text">Make 100 people feel seen.</div>
+      <div class="rule-sub">Not 10,000 strangers feel mildly interested. Your audience is Jax Beach kids who recognize the spots. Build for them first.</div>
+    </div>
+
+    <div class="rule">
+      <div class="rule-num">07</div>
+      <div class="rule-text">Shoot more than you need.</div>
+      <div class="rule-sub">Always. The good clip is the 17th attempt, not the 3rd.</div>
+    </div>
+
+    <h2 class="section-title">Mistakes To Avoid</h2>
+    <div class="section-subtitle">The traps</div>
+
+    <div class="card tilt-l">
+      <ul class="check-list">
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Bella+Canvas blanks — wrong fit, wrong feel</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Plastisol on vintage designs — kills the illusion</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Letting shops upsell DTG</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Generic streetwear names ("Apex," "Rogue," "Echo")</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Pricing without math (cost × 2.5–4 = retail)</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Buying a screen printing press (you're a brand-builder)</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Planning instead of launching</div></li>
+        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Trying to please everyone</div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====== NOTES ====== -->
+  <section class="section" data-section="notes">
+    <h2 class="section-title">Brain Dump</h2>
+    <div class="section-subtitle">Names, ideas, quotes, sketches in words</div>
+
+    <textarea class="brain-dump" id="brainDump" placeholder="Brand name ideas. Lyrics. Quotes. Things skater kids said at Kona. Local spot names. Printer quotes. Whatever's in your head right now..."></textarea>
+    <div class="save-msg" id="saveMsg">// Saved</div>
+
+    <h2 class="section-title">Printer Quotes Log</h2>
+    <div class="section-subtitle">Track every call</div>
+    <textarea class="brain-dump" id="printerLog" placeholder="Stephens Advertising — Called [date]. Spoke to [name]. Discharge: yes/no. MOQ: ___. Price per shirt: $___. Lead time: ___. Notes:"></textarea>
+    <div class="save-msg" id="saveMsg2">// Saved</div>
+
+    <h2 class="section-title">Daily Log</h2>
+    <div class="section-subtitle">What you did today</div>
+    <textarea class="brain-dump" id="dailyLog" placeholder="Today I:&#10;- Filmed at:&#10;- Designed:&#10;- Talked to:&#10;- Learned:&#10;- Tomorrow I'll:"></textarea>
+    <div class="save-msg" id="saveMsg3">// Saved</div>
+
+    <div class="reset-row">
+      <button class="reset-btn" id="resetDailyBtn">Reset Today's Checklist</button>
+      <div style="font-family:'VT323',monospace;font-size:0.75rem;color:var(--muted);margin-top:0.5rem;letter-spacing:0.1em;">
+        Resets automatically every morning
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  // PROVE IT. SHIP IT. POST IT. <br>
+  <span style="font-size:0.75rem;color:var(--muted);">v1.0 // jax beach build</span>
+</footer>
+
+<script>
+  // ===== STATE =====
+  const STORAGE_KEYS = {
+    checks: 'deck_checks_v1',
+    launchDate: 'deck_launch_date',
+    brainDump: 'deck_brain_dump',
+    printerLog: 'deck_printer_log',
+    dailyLog: 'deck_daily_log',
+    dailyReset: 'deck_daily_reset_date',
+    activeDays: 'deck_active_days',
+    streak: 'deck_streak',
+    lastActive: 'deck_last_active',
+    prompt: 'deck_daily_prompt',
+    promptDate: 'deck_prompt_date',
+  };
+
+  let checkState = {};
+  try {
+    checkState = JSON.parse(localStorage.getItem(STORAGE_KEYS.checks) || '{}');
+  } catch(e) { checkState = {}; }
+
+  // ===== DAILY PROMPTS =====
+  const dailyPrompts = [
+    "Film one hand for 30 seconds with the VX.",
+    "Sketch your brand name in 5 different typefaces.",
+    "Call one printer you haven't called yet.",
+    "Visit Sunrise Surf Shop. Just look. Don't pitch.",
+    "Shoot golden hour on A1A.",
+    "Walk Kona with the camera. Don't film. Just watch.",
+    "Buy a Comfort Colors 1717 blank online. Feel it.",
+    "Write 10 brand name candidates. None of them perfect.",
+    "Watch one Bobby Hundreds interview.",
+    "Film your shoes for 60 seconds.",
+    "Find 20 vintage surf graphics on Pinterest tonight.",
+    "Edit yesterday's footage. 30 seconds, 9:16, music.",
+    "Post one frame to your private story. Listen.",
+    "Read one chapter of This Is Not a T-Shirt.",
+    "Walk into a coffee shop with the VX visible. See who notices.",
+    "Spell your top 3 names backwards. Anything new?",
+    "Pick one Florida geographic name. Research its history.",
+    "Shoot 5 minutes at the Jax Pier. No tricks.",
+    "Sketch a graphic with halftones in Procreate.",
+    "Look at the Comfort Colors color chart. Pick your 3.",
+    "Text a skater you respect. Ask what they're shooting on.",
+    "Open the notebook. Write nothing for 2 minutes. Then write.",
+    "Film the drive to the spot.",
+    "Make a moodboard of just typography. No images.",
+    "Find one local kid wearing a tee you love. Ask where.",
+  ];
+
+  const stuckPrompts = [
+    "Pick up the camera and walk outside. Anywhere.",
+    "Sketch the first thing you see.",
+    "Text someone whose taste you trust a question.",
+    "Watch one minute of Mind Field.",
+    "Open Procreate. Make a mark. Stop second-guessing.",
+    "Write your brand name 30 times. Watch which feels right.",
+    "Drive to A1A. Film for 10 minutes. Don't think.",
+    "Call one printer. Just one.",
+    "Look at your Pinterest archive. Pick a favorite. Why?",
+    "Eat. Hydrate. Try again in 30 min.",
+    "Stop. Movement creates clarity. So move.",
+    "Re-read Rule 01.",
+  ];
+
+  // ===== DATE / COUNTDOWN =====
+  function fmtDate(d) {
+    const opts = { weekday: 'long', month: 'long', day: 'numeric' };
+    return d.toLocaleDateString('en-US', opts).toUpperCase();
+  }
+
+  function todayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function updateCountdown() {
+    const stored = localStorage.getItem(STORAGE_KEYS.launchDate);
+    const countdownEl = document.getElementById('countdownDays');
+    const displayEl = document.getElementById('launchDateDisplay');
+    if (!stored) {
+      countdownEl.textContent = '90';
+      displayEl.textContent = 'Set your launch date →';
+      return;
+    }
+    const launch = new Date(stored + 'T00:00:00');
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    const diff = Math.ceil((launch - now) / (1000*60*60*24));
+    if (diff < 0) {
+      countdownEl.textContent = 'GO';
+      countdownEl.style.color = 'var(--green)';
+      displayEl.textContent = `Launched ${Math.abs(diff)} days ago`;
+    } else {
+      countdownEl.textContent = diff;
+      countdownEl.style.color = diff <= 14 ? 'var(--red)' : (diff <= 30 ? 'var(--yellow)' : 'var(--red)');
+      const formatted = launch.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      displayEl.textContent = `Drop: ${formatted}`;
+    }
+  }
+
+  document.getElementById('setLaunchBtn').addEventListener('click', () => {
+    const input = document.getElementById('launchDateInput');
+    if (input.value) {
+      localStorage.setItem(STORAGE_KEYS.launchDate, input.value);
+      updateCountdown();
+    }
+  });
+
+  // Pre-populate launch input
+  const storedLaunch = localStorage.getItem(STORAGE_KEYS.launchDate);
+  if (storedLaunch) {
+    document.getElementById('launchDateInput').value = storedLaunch;
+  } else {
+    const def = new Date();
+    def.setDate(def.getDate() + 90);
+    document.getElementById('launchDateInput').value = def.toISOString().split('T')[0];
+  }
+
+  // ===== TABS =====
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.section');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.section;
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`.section[data-section="${target}"]`).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ===== CHECKLISTS =====
+  function applyCheckState() {
+    document.querySelectorAll('.check-item').forEach(item => {
+      if (item.classList.contains('static-list')) return;
+      const id = item.dataset.id;
+      if (id && checkState[id]) {
+        item.classList.add('done');
+      } else {
+        item.classList.remove('done');
+      }
+    });
+    updateDailyProgress();
+    updateStats();
+  }
+
+  function toggleCheck(id) {
+    checkState[id] = !checkState[id];
+    localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkState));
+    applyCheckState();
+    recordActivity();
+  }
+
+  document.querySelectorAll('.check-item').forEach(item => {
+    if (item.classList.contains('static-list')) return;
+    item.addEventListener('click', (e) => {
+      const id = item.dataset.id;
+      if (!id) return;
+      toggleCheck(id);
+    });
+  });
+
+  // ===== DAILY RESET =====
+  function maybeResetDaily() {
+    const today = todayKey();
+    const lastReset = localStorage.getItem(STORAGE_KEYS.dailyReset);
+    if (lastReset !== today) {
+      ['d-1','d-2','d-3','d-4','d-5','bt-cam-1','bt-cam-2','bt-cam-3','bt-dgn-1','bt-dgn-2','bt-dgn-3','bt-tlk-1','bt-tlk-2','bt-tlk-3'].forEach(id => {
+        delete checkState[id];
+      });
+      localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkState));
+      localStorage.setItem(STORAGE_KEYS.dailyReset, today);
+    }
+  }
+
+  document.getElementById('resetDailyBtn').addEventListener('click', () => {
+    ['d-1','d-2','d-3','d-4','d-5'].forEach(id => { delete checkState[id]; });
+    localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkState));
+    applyCheckState();
+  });
+
+  // ===== DAILY PROGRESS =====
+  function updateDailyProgress() {
+    const dailyIds = ['d-1','d-2','d-3','d-4','d-5'];
+    const done = dailyIds.filter(id => checkState[id]).length;
+    const pct = (done / dailyIds.length) * 100;
+    const fill = document.getElementById('dailyProgress');
+    const txt = document.getElementById('dailyProgressText');
+    if (fill) fill.style.width = pct + '%';
+    if (txt) txt.textContent = `${done} / ${dailyIds.length}`;
+  }
+
+  // ===== STATS / STREAK =====
+  function updateStats() {
+    const total = Object.values(checkState).filter(v => v).length;
+    document.getElementById('totalChecks').textContent = total;
+
+    const activeDaysList = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeDays) || '[]');
+    document.getElementById('totalDays').textContent = activeDaysList.length;
+
+    // Streak calculation
+    const sortedDays = [...activeDaysList].sort();
+    let streak = 0;
+    const today = todayKey();
+    let cursor = new Date();
+    cursor.setHours(0,0,0,0);
+    while (true) {
+      const key = `${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,'0')}-${String(cursor.getDate()).padStart(2,'0')}`;
+      if (sortedDays.includes(key)) {
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    document.getElementById('streakDays').textContent = streak;
+  }
+
+  function recordActivity() {
+    const today = todayKey();
+    const activeDaysList = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeDays) || '[]');
+    if (!activeDaysList.includes(today)) {
+      activeDaysList.push(today);
+      localStorage.setItem(STORAGE_KEYS.activeDays, JSON.stringify(activeDaysList));
+    }
+    updateStats();
+  }
+
+  // ===== PROMPTS =====
+  function pickPrompt() {
+    const today = todayKey();
+    const storedDate = localStorage.getItem(STORAGE_KEYS.promptDate);
+    if (storedDate === today) {
+      const stored = localStorage.getItem(STORAGE_KEYS.prompt);
+      if (stored) {
+        document.getElementById('dailyPrompt').textContent = stored;
+        return;
+      }
+    }
+    const pick = dailyPrompts[Math.floor(Math.random() * dailyPrompts.length)];
+    document.getElementById('dailyPrompt').textContent = pick;
+    localStorage.setItem(STORAGE_KEYS.prompt, pick);
+    localStorage.setItem(STORAGE_KEYS.promptDate, today);
+  }
+
+  document.getElementById('rerollBtn').addEventListener('click', () => {
+    const pick = dailyPrompts[Math.floor(Math.random() * dailyPrompts.length)];
+    document.getElementById('dailyPrompt').textContent = pick;
+    localStorage.setItem(STORAGE_KEYS.prompt, pick);
+    localStorage.setItem(STORAGE_KEYS.promptDate, todayKey());
+  });
+
+  function pickStuckPrompt() {
+    const pick = stuckPrompts[Math.floor(Math.random() * stuckPrompts.length)];
+    document.getElementById('stuckPrompt').textContent = pick;
+  }
+
+  document.getElementById('stuckReroll').addEventListener('click', pickStuckPrompt);
+
+  // ===== TEXTAREAS / NOTES =====
+  function bindTextarea(elId, key, msgId) {
+    const el = document.getElementById(elId);
+    const msg = document.getElementById(msgId);
+    el.value = localStorage.getItem(key) || '';
+    let timer;
+    el.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        localStorage.setItem(key, el.value);
+        if (msg) {
+          msg.classList.add('show');
+          setTimeout(() => msg.classList.remove('show'), 1200);
+        }
+        recordActivity();
+      }, 400);
+    });
+  }
+
+  bindTextarea('brainDump', STORAGE_KEYS.brainDump, 'saveMsg');
+  bindTextarea('printerLog', STORAGE_KEYS.printerLog, 'saveMsg2');
+  bindTextarea('dailyLog', STORAGE_KEYS.dailyLog, 'saveMsg3');
+
+  // ===== HEADER DATE =====
+  document.getElementById('dateLabel').textContent = fmtDate(new Date());
+
+  // ===== INIT =====
+  maybeResetDaily();
+  applyCheckState();
+  updateCountdown();
+  pickPrompt();
+  pickStuckPrompt();
+
+  // Auto-record activity on any interaction with the page
+  let activityRecorded = false;
+  document.addEventListener('click', () => {
+    if (!activityRecorded) {
+      recordActivity();
+      activityRecorded = true;
+    }
+  }, { once: false });
+</script>
+
+</body>
+</html>
