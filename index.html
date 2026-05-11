@@ -34,7 +34,6 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* HALFTONE OVERLAY */
   body::before {
     content: '';
     position: fixed;
@@ -46,7 +45,6 @@
     mix-blend-mode: multiply;
   }
 
-  /* GRAIN/NOISE */
   body::after {
     content: '';
     position: fixed;
@@ -58,7 +56,6 @@
     opacity: 0.35;
   }
 
-  /* HEADER */
   header {
     position: relative;
     background: var(--bg-dark);
@@ -106,9 +103,7 @@
     padding: 0 0.5rem;
   }
 
-  .rec-dot {
-    color: var(--red);
-  }
+  .rec-dot { color: var(--red); }
   .rec-dot::before {
     content: '●';
     margin-right: 0.3em;
@@ -116,7 +111,6 @@
   }
   @keyframes blink { 50% { opacity: 0.3; } }
 
-  /* TAB NAV */
   .tabs {
     position: sticky;
     top: 0;
@@ -156,7 +150,6 @@
 
   .tab:hover { color: var(--bg); }
 
-  /* MAIN */
   main {
     position: relative;
     z-index: 2;
@@ -169,7 +162,6 @@
   .section.active { display: block; animation: fadeIn 0.25s; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* HERO STATS */
   .hero {
     background: var(--paper);
     border: 3px solid var(--ink);
@@ -177,14 +169,6 @@
     padding: 1.2rem;
     margin-bottom: 1.4rem;
     transform: rotate(-0.4deg);
-  }
-
-  .hero h2 {
-    font-family: 'Bungee', sans-serif;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
-    letter-spacing: -0.01em;
   }
 
   .countdown {
@@ -239,7 +223,6 @@
 
   .launch-input-row button:hover { background: var(--red); border-color: var(--red); }
 
-  /* SECTION HEADERS */
   .section-title {
     font-family: 'Bungee', sans-serif;
     font-size: 1.4rem;
@@ -259,12 +242,11 @@
     margin-bottom: 0.6rem;
   }
 
-  /* CARDS */
   .card {
     background: var(--paper);
     border: 3px solid var(--ink);
     box-shadow: 5px 5px 0 var(--ink);
-    padding: 1rem 1rem 0.6rem;
+    padding: 1rem 1rem 0.8rem;
     margin-bottom: 1.2rem;
     position: relative;
   }
@@ -272,12 +254,20 @@
   .card.tilt-l { transform: rotate(-0.3deg); }
   .card.tilt-r { transform: rotate(0.3deg); box-shadow: -5px 5px 0 var(--ink); }
 
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
   .card h3 {
     font-family: 'Archivo Black', sans-serif;
     font-size: 1rem;
     text-transform: uppercase;
-    margin-bottom: 0.6rem;
     letter-spacing: -0.01em;
+    flex: 1;
   }
 
   .card-stamp {
@@ -292,25 +282,46 @@
     text-transform: uppercase;
     transform: rotate(2deg);
     letter-spacing: 0.05em;
+    z-index: 2;
   }
   .card-stamp.blue { background: var(--blue); }
   .card-stamp.green { background: var(--green); }
 
-  /* CHECKLIST */
-  .check-list {
-    list-style: none;
+  .card-actions {
+    display: flex;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: 2px solid var(--ink);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink);
+    line-height: 1;
     padding: 0;
   }
+  .icon-btn:hover { background: var(--ink); color: var(--yellow); }
+  .icon-btn.red:hover { background: var(--red); border-color: var(--red); color: var(--bg); }
+
+  .check-list { list-style: none; padding: 0; }
 
   .check-item {
     display: flex;
     align-items: flex-start;
-    gap: 0.7rem;
+    gap: 0.6rem;
     padding: 0.55rem 0;
     border-bottom: 1.5px dashed rgba(26,26,26,0.18);
-    cursor: pointer;
     user-select: none;
     transition: opacity 0.15s;
+    position: relative;
   }
   .check-item:last-child { border-bottom: none; }
 
@@ -323,11 +334,10 @@
     margin-top: 1px;
     position: relative;
     transition: all 0.15s;
+    cursor: pointer;
   }
 
-  .check-item.done .check-box {
-    background: var(--ink);
-  }
+  .check-item.done .check-box { background: var(--ink); }
 
   .check-item.done .check-box::after {
     content: '✓';
@@ -342,11 +352,17 @@
     line-height: 1;
   }
 
-  .check-text {
+  .check-content {
     flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .check-text {
     font-size: 0.95rem;
     line-height: 1.4;
     transition: all 0.2s;
+    word-wrap: break-word;
   }
 
   .check-item.done .check-text {
@@ -362,9 +378,88 @@
     margin-top: 0.15rem;
     text-decoration: none !important;
     opacity: 1 !important;
+    word-wrap: break-word;
   }
 
-  /* PROGRESS BAR */
+  .item-actions {
+    display: flex;
+    gap: 0.2rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+  }
+  .check-item:hover .item-actions { opacity: 1; }
+
+  .mini-btn {
+    background: transparent;
+    border: 1.5px solid var(--muted);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1;
+    padding: 0;
+  }
+  .mini-btn:hover { background: var(--ink); color: var(--yellow); border-color: var(--ink); }
+  .mini-btn.del:hover { background: var(--red); border-color: var(--red); color: var(--bg); }
+
+  .add-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 2px dashed rgba(26,26,26,0.25);
+  }
+
+  .add-input {
+    flex: 1;
+    padding: 0.5rem 0.7rem;
+    border: 2px solid var(--ink);
+    background: var(--bg);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.9rem;
+    color: var(--ink);
+    border-radius: 0;
+    min-width: 0;
+  }
+  .add-input:focus { outline: none; border-color: var(--red); }
+
+  .add-btn {
+    background: var(--ink);
+    color: var(--yellow);
+    border: 2px solid var(--ink);
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.75rem;
+    padding: 0 0.8rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .add-btn:hover { background: var(--red); border-color: var(--red); color: var(--bg); }
+
+  .add-list-card {
+    background: transparent;
+    border: 3px dashed var(--muted);
+    box-shadow: none;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
+
+  .add-list-card .section-subtitle { margin-bottom: 0.6rem; color: var(--muted); }
+
+  .add-list-row {
+    display: flex;
+    gap: 0.4rem;
+    align-items: stretch;
+  }
+
   .progress-wrap {
     background: var(--ink);
     height: 18px;
@@ -396,7 +491,6 @@
     letter-spacing: 0.1em;
   }
 
-  /* NOTES TEXTAREA */
   textarea.brain-dump {
     width: 100%;
     min-height: 180px;
@@ -425,7 +519,6 @@
   }
   .save-msg.show { opacity: 1; }
 
-  /* RULES / QUOTES */
   .rule {
     border-left: 6px solid var(--red);
     padding: 0.8rem 0 0.8rem 1rem;
@@ -458,7 +551,6 @@
     line-height: 1.4;
   }
 
-  /* SPECS / PRINT INFO */
   .spec-row {
     display: grid;
     grid-template-columns: 110px 1fr;
@@ -479,7 +571,6 @@
     padding-top: 2px;
   }
 
-  /* PHONE SCRIPT */
   .script-box {
     border: 2.5px solid var(--ink);
     background: var(--bg);
@@ -504,31 +595,6 @@
     line-height: 1;
   }
 
-  /* MILESTONE PILLS */
-  .pill-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin: 0.6rem 0;
-  }
-
-  .pill {
-    font-family: 'Bungee', sans-serif;
-    background: var(--ink);
-    color: var(--bg);
-    padding: 0.3rem 0.7rem;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 2px solid var(--ink);
-    cursor: pointer;
-  }
-  .pill.complete {
-    background: var(--green);
-    border-color: var(--green);
-  }
-
-  /* DAILY PROMPTS */
   .prompt-box {
     background: var(--yellow);
     border: 3px solid var(--ink);
@@ -568,17 +634,14 @@
     margin-top: 0.5rem;
   }
 
-  /* LINKS */
   a {
     color: var(--blue);
     text-decoration: underline;
     text-decoration-style: dotted;
     text-underline-offset: 2px;
   }
-
   a:hover { color: var(--red); }
 
-  /* RESET BUTTON */
   .reset-row {
     margin-top: 2rem;
     padding-top: 1rem;
@@ -596,10 +659,10 @@
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    margin: 0.2rem;
   }
   .reset-btn:hover { color: var(--red); border-color: var(--red); }
 
-  /* FOOTER */
   footer {
     text-align: center;
     padding: 1.5rem 1rem 2rem;
@@ -611,7 +674,6 @@
     z-index: 2;
   }
 
-  /* TIPS / CALLOUTS */
   .tip {
     background: var(--bg-dark);
     color: var(--bg);
@@ -625,7 +687,6 @@
 
   .tip strong { color: var(--yellow); font-family: 'Bungee', sans-serif; }
 
-  /* DAILY STREAK */
   .streak-row {
     display: flex;
     justify-content: space-around;
@@ -653,7 +714,83 @@
     margin-top: 0.3rem;
   }
 
-  /* RESPONSIVE TIGHTENING */
+  .modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-bg.show { display: flex; }
+
+  .modal {
+    background: var(--bg);
+    border: 4px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--red);
+    padding: 1.2rem;
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+  }
+
+  .modal h3 {
+    font-family: 'Bungee', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .modal label {
+    font-family: 'VT323', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    display: block;
+    margin: 0.6rem 0 0.2rem;
+  }
+
+  .modal input, .modal textarea {
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border: 2px solid var(--ink);
+    background: var(--bg);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.95rem;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .modal input:focus, .modal textarea:focus { outline: none; border-color: var(--red); }
+
+  .modal textarea { resize: vertical; min-height: 70px; }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .modal-btn {
+    font-family: 'Bungee', sans-serif;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 2px solid var(--ink);
+  }
+  .modal-btn.primary { background: var(--ink); color: var(--yellow); }
+  .modal-btn.primary:hover { background: var(--red); border-color: var(--red); color: var(--bg); }
+  .modal-btn.secondary { background: transparent; color: var(--ink); }
+  .modal-btn.secondary:hover { background: var(--muted); color: var(--bg); border-color: var(--muted); }
+  .modal-btn.danger { background: var(--red); color: var(--bg); border-color: var(--red); }
+  .modal-btn.danger:hover { background: var(--bg-dark); border-color: var(--bg-dark); }
+
   @media (max-width: 380px) {
     .spec-row { grid-template-columns: 90px 1fr; }
     .countdown { font-size: 2.6rem; }
@@ -667,12 +804,12 @@
   <div class="logo">THE DECK</div>
   <div class="tag-line">/// DAILY BRAND BUILD ///</div>
   <div class="meta-bar">
-    <span class="rec-dot" id="recLabel">REC</span>
+    <span class="rec-dot">REC</span>
     <span id="dateLabel">--</span>
   </div>
 </header>
 
-<nav class="tabs" id="tabNav">
+<nav class="tabs">
   <button class="tab active" data-section="home">Home</button>
   <button class="tab" data-section="today">Today</button>
   <button class="tab" data-section="camera">Camera</button>
@@ -684,7 +821,6 @@
 
 <main>
 
-  <!-- ====== HOME ====== -->
   <section class="section active" data-section="home">
     <div class="hero">
       <div class="countdown-label">Days To Drop</div>
@@ -720,61 +856,14 @@
     <h2 class="section-title">The Big Three</h2>
     <div class="section-subtitle">Move at least one every day</div>
 
-    <div class="card tilt-l">
-      <span class="card-stamp">Camera</span>
-      <h3>Film Something</h3>
-      <ul class="check-list" data-checklist="bigthree-camera">
-        <li class="check-item" data-id="bt-cam-1">
-          <div class="check-box"></div>
-          <div class="check-text">Test the VX1000 + Powerplay end-to-end<span class="check-sub">Record, transfer, verify SD card workflow</span></div>
-        </li>
-        <li class="check-item" data-id="bt-cam-2">
-          <div class="check-box"></div>
-          <div class="check-text">Shoot 10 minutes of B-roll<span class="check-sub">Hands, friends, parking lots, anything</span></div>
-        </li>
-        <li class="check-item" data-id="bt-cam-3">
-          <div class="check-box"></div>
-          <div class="check-text">Edit one 30-second clip<span class="check-sub">CapCut, vertical, lo-fi music</span></div>
-        </li>
-      </ul>
-    </div>
+    <div id="homeListContainer"></div>
 
-    <div class="card tilt-r">
-      <span class="card-stamp blue">Design</span>
-      <h3>Make Something</h3>
-      <ul class="check-list" data-checklist="bigthree-design">
-        <li class="check-item" data-id="bt-dgn-1">
-          <div class="check-box"></div>
-          <div class="check-text">Sketch in Procreate (15 min minimum)<span class="check-sub">Halftones, wavy type, hand-drawn</span></div>
-        </li>
-        <li class="check-item" data-id="bt-dgn-2">
-          <div class="check-box"></div>
-          <div class="check-text">Add 5 references to Pinterest archive<span class="check-sub">Sundek, Birdwell, Ocean Pacific, vintage surf</span></div>
-        </li>
-        <li class="check-item" data-id="bt-dgn-3">
-          <div class="check-box"></div>
-          <div class="check-text">Brainstorm 5 new brand names<span class="check-sub">Hyper-local Jax / last name / inside joke</span></div>
-        </li>
-      </ul>
-    </div>
-
-    <div class="card tilt-l">
-      <span class="card-stamp green">Move</span>
-      <h3>Talk To Someone</h3>
-      <ul class="check-list" data-checklist="bigthree-talk">
-        <li class="check-item" data-id="bt-tlk-1">
-          <div class="check-box"></div>
-          <div class="check-text">Call/visit one local printer<span class="check-sub">Stephens, MLXL, or another verified shop</span></div>
-        </li>
-        <li class="check-item" data-id="bt-tlk-2">
-          <div class="check-box"></div>
-          <div class="check-text">DM/show work to 1 person whose taste you trust<span class="check-sub">Friend, local shop kid, older skater</span></div>
-        </li>
-        <li class="check-item" data-id="bt-tlk-3">
-          <div class="check-box"></div>
-          <div class="check-text">Visit one local surf/skate shop<span class="check-sub">Sunrise, Aqua East, Sun Dog</span></div>
-        </li>
-      </ul>
+    <div class="card add-list-card">
+      <div class="section-subtitle">+ Add new list to Home</div>
+      <div class="add-list-row">
+        <input class="add-input" type="text" id="newHomeListInput" placeholder="List name..." />
+        <button class="add-btn" data-add-list="home">Add</button>
+      </div>
     </div>
 
     <div class="tip">
@@ -782,38 +871,11 @@
     </div>
   </section>
 
-  <!-- ====== TODAY ====== -->
   <section class="section" data-section="today">
     <h2 class="section-title">Today's Checklist</h2>
-    <div class="section-subtitle">Reset every morning</div>
+    <div class="section-subtitle">Resets every morning</div>
 
-    <div class="card tilt-l">
-      <h3>The Daily Five</h3>
-      <ul class="check-list" data-checklist="daily" data-daily="true">
-        <li class="check-item" data-id="d-1">
-          <div class="check-box"></div>
-          <div class="check-text">Open the paper notebook<span class="check-sub">Write one idea, sketch, or observation</span></div>
-        </li>
-        <li class="check-item" data-id="d-2">
-          <div class="check-box"></div>
-          <div class="check-text">Shoot something with the VX<span class="check-sub">Even 60 seconds counts</span></div>
-        </li>
-        <li class="check-item" data-id="d-3">
-          <div class="check-box"></div>
-          <div class="check-text">Sketch or design in Procreate<span class="check-sub">15 min minimum, no editing yet</span></div>
-        </li>
-        <li class="check-item" data-id="d-4">
-          <div class="check-box"></div>
-          <div class="check-text">Watch one piece of brand inspiration<span class="check-sub">Skate part, brand mini-doc, Seaggs video</span></div>
-        </li>
-        <li class="check-item" data-id="d-5">
-          <div class="check-box"></div>
-          <div class="check-text">Do one move that pushes the brand<span class="check-sub">A call, a post, a meet, a sample, a decision</span></div>
-        </li>
-      </ul>
-      <div class="progress-wrap"><div class="progress-fill" id="dailyProgress" style="width: 0%;"></div></div>
-      <div class="progress-text" id="dailyProgressText">0 / 5</div>
-    </div>
+    <div id="todayListContainer"></div>
 
     <div class="prompt-box">
       <div class="prompt-label">If You're Stuck</div>
@@ -824,68 +886,17 @@
     <h2 class="section-title">Week 1 with VX</h2>
     <div class="section-subtitle">After the box arrives</div>
 
-    <div class="card tilt-r">
-      <h3>Unboxing Day</h3>
-      <ul class="check-list" data-checklist="week1-unbox">
-        <li class="check-item" data-id="w1-1">
-          <div class="check-box"></div>
-          <div class="check-text">Save eBay receipt as PDF</div>
-        </li>
-        <li class="check-item" data-id="w1-2">
-          <div class="check-box"></div>
-          <div class="check-text">Film the unboxing (Reels content)</div>
-        </li>
-        <li class="check-item" data-id="w1-3">
-          <div class="check-box"></div>
-          <div class="check-text">Test record + playback to SD card</div>
-        </li>
-        <li class="check-item" data-id="w1-4">
-          <div class="check-box"></div>
-          <div class="check-text">Test fisheye attachment</div>
-        </li>
-        <li class="check-item" data-id="w1-5">
-          <div class="check-box"></div>
-          <div class="check-text">Verify all batteries hold charge</div>
-        </li>
-        <li class="check-item" data-id="w1-6">
-          <div class="check-box"></div>
-          <div class="check-text">Note the 60-day warranty start date</div>
-        </li>
-        <li class="check-item" data-id="w1-7">
-          <div class="check-box"></div>
-          <div class="check-text">Submit PEP reimbursement in EMA</div>
-        </li>
-      </ul>
-    </div>
+    <div id="week1ListContainer"></div>
 
-    <div class="card tilt-l">
-      <h3>First Real Shoot</h3>
-      <ul class="check-list" data-checklist="week1-shoot">
-        <li class="check-item" data-id="w1s-1">
-          <div class="check-box"></div>
-          <div class="check-text">Go to Kona, Ed Austin, or local skate spot</div>
-        </li>
-        <li class="check-item" data-id="w1s-2">
-          <div class="check-box"></div>
-          <div class="check-text">Shoot 3+ tricks from low angles</div>
-        </li>
-        <li class="check-item" data-id="w1s-3">
-          <div class="check-box"></div>
-          <div class="check-text">Shoot 10 lifestyle B-roll clips (no tricks)</div>
-        </li>
-        <li class="check-item" data-id="w1s-4">
-          <div class="check-box"></div>
-          <div class="check-text">Transfer footage to Mac</div>
-        </li>
-        <li class="check-item" data-id="w1s-5">
-          <div class="check-box"></div>
-          <div class="check-text">Watch playback. What worked? What didn't?</div>
-        </li>
-      </ul>
+    <div class="card add-list-card">
+      <div class="section-subtitle">+ Add new list to Today</div>
+      <div class="add-list-row">
+        <input class="add-input" type="text" id="newTodayListInput" placeholder="List name..." />
+        <button class="add-btn" data-add-list="today">Add</button>
+      </div>
     </div>
   </section>
 
-  <!-- ====== CAMERA ====== -->
   <section class="section" data-section="camera">
     <h2 class="section-title">The VX Manual</h2>
     <div class="section-subtitle">How to actually film</div>
@@ -912,29 +923,14 @@
     <h2 class="section-title">Local Spots</h2>
     <div class="section-subtitle">Where to point the lens</div>
 
-    <div class="card tilt-l">
-      <h3>Skate</h3>
-      <ul class="check-list" data-checklist="spots-skate">
-        <li class="check-item" data-id="sk-1"><div class="check-box"></div><div class="check-text">Kona Skatepark</div></li>
-        <li class="check-item" data-id="sk-2"><div class="check-box"></div><div class="check-text">Ed Austin Skatepark</div></li>
-        <li class="check-item" data-id="sk-3"><div class="check-box"></div><div class="check-text">Atlantic Beach side streets</div></li>
-        <li class="check-item" data-id="sk-4"><div class="check-box"></div><div class="check-text">Parking garages downtown (golden hour)</div></li>
-        <li class="check-item" data-id="sk-5"><div class="check-box"></div><div class="check-text">Empty lots with curbs near 3rd St</div></li>
-      </ul>
-    </div>
+    <div id="cameraListContainer"></div>
 
-    <div class="card tilt-r">
-      <h3>Surf / Water / Vibes</h3>
-      <ul class="check-list" data-checklist="spots-vibe">
-        <li class="check-item" data-id="vb-1"><div class="check-box"></div><div class="check-text">Jax Beach Pier</div></li>
-        <li class="check-item" data-id="vb-2"><div class="check-box"></div><div class="check-text">The Poles</div></li>
-        <li class="check-item" data-id="vb-3"><div class="check-box"></div><div class="check-text">Hanna Park</div></li>
-        <li class="check-item" data-id="vb-4"><div class="check-box"></div><div class="check-text">Vilano Beach jetty</div></li>
-        <li class="check-item" data-id="vb-5"><div class="check-box"></div><div class="check-text">A1A at golden hour</div></li>
-        <li class="check-item" data-id="vb-6"><div class="check-box"></div><div class="check-text">Mayport ferry</div></li>
-        <li class="check-item" data-id="vb-7"><div class="check-box"></div><div class="check-text">Huguenot dunes</div></li>
-        <li class="check-item" data-id="vb-8"><div class="check-box"></div><div class="check-text">Old Florida diners (parking lots)</div></li>
-      </ul>
+    <div class="card add-list-card">
+      <div class="section-subtitle">+ Add new spot list</div>
+      <div class="add-list-row">
+        <input class="add-input" type="text" id="newCameraListInput" placeholder="List name..." />
+        <button class="add-btn" data-add-list="camera">Add</button>
+      </div>
     </div>
 
     <div class="tip">
@@ -942,7 +938,6 @@
     </div>
   </section>
 
-  <!-- ====== BRAND ====== -->
   <section class="section" data-section="brand">
     <h2 class="section-title">Name The Brand</h2>
     <div class="section-subtitle">30 candidates, then the gauntlet</div>
@@ -967,58 +962,17 @@
       </div>
     </div>
 
-    <div class="card tilt-r">
-      <h3>The Gauntlet</h3>
-      <div class="section-subtitle" style="margin-bottom: 0.5rem;">Top 5 names get all 4 checks</div>
-      <ul class="check-list" data-checklist="gauntlet">
-        <li class="check-item" data-id="g-1"><div class="check-box"></div><div class="check-text">.com domain available<span class="check-sub">Don't settle for .co or hyphens</span></div></li>
-        <li class="check-item" data-id="g-2"><div class="check-box"></div><div class="check-text">Instagram handle clean<span class="check-sub">No underscores, no numbers</span></div></li>
-        <li class="check-item" data-id="g-3"><div class="check-box"></div><div class="check-text">TikTok handle clean<span class="check-sub">Same standard as IG</span></div></li>
-        <li class="check-item" data-id="g-4"><div class="check-box"></div><div class="check-text">USPTO search clear<span class="check-sub"><a href="https://www.uspto.gov/trademarks/search" target="_blank" rel="noopener">uspto.gov/trademarks/search</a></span></div></li>
-        <li class="check-item" data-id="g-5"><div class="check-box"></div><div class="check-text">Google "[name] clothing" empty<span class="check-sub">Common-law trademark check</span></div></li>
-      </ul>
-    </div>
+    <div id="brandListContainer"></div>
 
-    <h2 class="section-title">The 90-Day Plan</h2>
-    <div class="section-subtitle">Big milestones</div>
-
-    <div class="card tilt-l">
-      <h3>Month 1 — Foundation</h3>
-      <ul class="check-list" data-checklist="m1">
-        <li class="check-item" data-id="m1-1"><div class="check-box"></div><div class="check-text">Tech stack ordered<span class="check-sub">MacBook, iPad, Procreate, Adobe CC</span></div></li>
-        <li class="check-item" data-id="m1-2"><div class="check-box"></div><div class="check-text">Paper notebook started, carried daily</div></li>
-        <li class="check-item" data-id="m1-3"><div class="check-box"></div><div class="check-text">Pinterest archive: 200+ vintage references</div></li>
-        <li class="check-item" data-id="m1-4"><div class="check-box"></div><div class="check-text">5 graphic sketches in Procreate</div></li>
-        <li class="check-item" data-id="m1-5"><div class="check-box"></div><div class="check-text">Brand name locked + handles claimed</div></li>
-        <li class="check-item" data-id="m1-6"><div class="check-box"></div><div class="check-text">First sketch posted to friends</div></li>
-      </ul>
-    </div>
-
-    <div class="card tilt-r">
-      <h3>Month 2 — Art &amp; The Deal</h3>
-      <ul class="check-list" data-checklist="m2">
-        <li class="check-item" data-id="m2-1"><div class="check-box"></div><div class="check-text">1-2 hero graphics finalized</div></li>
-        <li class="check-item" data-id="m2-2"><div class="check-box"></div><div class="check-text">Tech pack built (Pantone, sizing, placement)</div></li>
-        <li class="check-item" data-id="m2-3"><div class="check-box"></div><div class="check-text">Local printers called + visited</div></li>
-        <li class="check-item" data-id="m2-4"><div class="check-box"></div><div class="check-text">Press proof approved</div></li>
-        <li class="check-item" data-id="m2-5"><div class="check-box"></div><div class="check-text">36-shirt run placed</div></li>
-      </ul>
-    </div>
-
-    <div class="card tilt-l">
-      <h3>Month 3 — Drop &amp; Streets</h3>
-      <ul class="check-list" data-checklist="m3">
-        <li class="check-item" data-id="m3-1"><div class="check-box"></div><div class="check-text">Lookbook shoot at 3+ local spots</div></li>
-        <li class="check-item" data-id="m3-2"><div class="check-box"></div><div class="check-text">36 shirts received, every one inspected</div></li>
-        <li class="check-item" data-id="m3-3"><div class="check-box"></div><div class="check-text">Shopify (or alt) store built</div></li>
-        <li class="check-item" data-id="m3-4"><div class="check-box"></div><div class="check-text">Build-in-public content posted</div></li>
-        <li class="check-item" data-id="m3-5"><div class="check-box"></div><div class="check-text">DROP LIVE</div></li>
-        <li class="check-item" data-id="m3-6"><div class="check-box"></div><div class="check-text">Shirts hand-delivered to local shops</div></li>
-      </ul>
+    <div class="card add-list-card">
+      <div class="section-subtitle">+ Add new brand list</div>
+      <div class="add-list-row">
+        <input class="add-input" type="text" id="newBrandListInput" placeholder="List name..." />
+        <button class="add-btn" data-add-list="brand">Add</button>
+      </div>
     </div>
   </section>
 
-  <!-- ====== PRINT ====== -->
   <section class="section" data-section="print">
     <h2 class="section-title">Print Specs</h2>
     <div class="section-subtitle">Non-negotiable when you call printers</div>
@@ -1043,43 +997,17 @@
       <strong>First call will feel awkward.</strong> By the third you'll sound like you know what you're doing. Just dial.
     </div>
 
-    <h2 class="section-title">Local Printers</h2>
+    <h2 class="section-title">Printers &amp; Retail</h2>
     <div class="section-subtitle">Verify yourself before calling</div>
 
-    <div class="card tilt-l">
-      <h3>Printer Calls</h3>
-      <ul class="check-list" data-checklist="printers">
-        <li class="check-item" data-id="p-1">
-          <div class="check-box"></div>
-          <div class="check-text">Stephens Advertising (Jacksonville)<span class="check-sub">Reportedly does water-based + discharge. First call.</span></div>
-        </li>
-        <li class="check-item" data-id="p-2">
-          <div class="check-box"></div>
-          <div class="check-text">MLXL (Jacksonville)<span class="check-sub">Modern production house, water-based ink</span></div>
-        </li>
-        <li class="check-item" data-id="p-3">
-          <div class="check-box"></div>
-          <div class="check-text">B&amp;B Screenprinting (Winter Park)<span class="check-sub">Backup. Discharge, 24-piece minimum. 2hr drive.</span></div>
-        </li>
-        <li class="check-item" data-id="p-4">
-          <div class="check-box"></div>
-          <div class="check-text">Visit the shop in person<span class="check-sub">Touch sample discharge prints before committing</span></div>
-        </li>
-      </ul>
-    </div>
+    <div id="printListContainer"></div>
 
-    <h2 class="section-title">Local Retail</h2>
-    <div class="section-subtitle">Bypass the internet for Drop 1</div>
-
-    <div class="card tilt-r">
-      <h3>Shops to Walk Into</h3>
-      <ul class="check-list" data-checklist="retail">
-        <li class="check-item" data-id="r-1"><div class="check-box"></div><div class="check-text">Sunrise Surf Shop (Jax Beach)</div></li>
-        <li class="check-item" data-id="r-2"><div class="check-box"></div><div class="check-text">Aqua East Surf Shop</div></li>
-        <li class="check-item" data-id="r-3"><div class="check-box"></div><div class="check-text">Sun Dog (Atlantic Beach)</div></li>
-        <li class="check-item" data-id="r-4"><div class="check-box"></div><div class="check-text">Local skate shops near Kona</div></li>
-        <li class="check-item" data-id="r-5"><div class="check-box"></div><div class="check-text">Independent coffee shops Jax/Atlantic/Neptune</div></li>
-      </ul>
+    <div class="card add-list-card">
+      <div class="section-subtitle">+ Add new print/retail list</div>
+      <div class="add-list-row">
+        <input class="add-input" type="text" id="newPrintListInput" placeholder="List name..." />
+        <button class="add-btn" data-add-list="print">Add</button>
+      </div>
     </div>
 
     <div class="tip">
@@ -1087,7 +1015,6 @@
     </div>
   </section>
 
-  <!-- ====== RULES ====== -->
   <section class="section" data-section="rules">
     <h2 class="section-title">Golden Rules</h2>
     <div class="section-subtitle">Read every Monday</div>
@@ -1135,23 +1062,19 @@
     </div>
 
     <h2 class="section-title">Mistakes To Avoid</h2>
-    <div class="section-subtitle">The traps</div>
+    <div class="section-subtitle">Editable — add your own as you learn</div>
 
-    <div class="card tilt-l">
-      <ul class="check-list">
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Bella+Canvas blanks — wrong fit, wrong feel</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Plastisol on vintage designs — kills the illusion</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Letting shops upsell DTG</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Generic streetwear names ("Apex," "Rogue," "Echo")</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Pricing without math (cost × 2.5–4 = retail)</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Buying a screen printing press (you're a brand-builder)</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Planning instead of launching</div></li>
-        <li class="check-item static-list"><div class="check-box" style="background:var(--red);border-color:var(--red);"></div><div class="check-text">Trying to please everyone</div></li>
-      </ul>
+    <div id="rulesListContainer"></div>
+
+    <div class="card add-list-card">
+      <div class="section-subtitle">+ Add new rules list</div>
+      <div class="add-list-row">
+        <input class="add-input" type="text" id="newRulesListInput" placeholder="List name..." />
+        <button class="add-btn" data-add-list="rules">Add</button>
+      </div>
     </div>
   </section>
 
-  <!-- ====== NOTES ====== -->
   <section class="section" data-section="notes">
     <h2 class="section-title">Brain Dump</h2>
     <div class="section-subtitle">Names, ideas, quotes, sketches in words</div>
@@ -1171,321 +1094,717 @@
 
     <div class="reset-row">
       <button class="reset-btn" id="resetDailyBtn">Reset Today's Checklist</button>
+      <button class="reset-btn" id="exportBtn">Export Backup</button>
+      <button class="reset-btn" id="importBtn">Import Backup</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;">
       <div style="font-family:'VT323',monospace;font-size:0.75rem;color:var(--muted);margin-top:0.5rem;letter-spacing:0.1em;">
-        Resets automatically every morning
+        Daily lists reset automatically every morning.<br>
+        Export to backup. Import to restore on another device.
       </div>
     </div>
   </section>
 
 </main>
 
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">Edit Item</h3>
+    <label for="modalMain">Main text</label>
+    <input type="text" id="modalMain" />
+    <label for="modalSub">Sub text (optional)</label>
+    <textarea id="modalSub" rows="2"></textarea>
+    <div class="modal-actions">
+      <button class="modal-btn danger" id="modalDelete" style="margin-right:auto;">Delete</button>
+      <button class="modal-btn secondary" id="modalCancel">Cancel</button>
+      <button class="modal-btn primary" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+
 <footer>
   // PROVE IT. SHIP IT. POST IT. <br>
-  <span style="font-size:0.75rem;color:var(--muted);">v1.0 // jax beach build</span>
+  <span style="font-size:0.75rem;color:var(--muted);">v2.0 // editable // jax beach</span>
 </footer>
 
 <script>
-  // ===== STATE =====
-  const STORAGE_KEYS = {
-    checks: 'deck_checks_v1',
-    launchDate: 'deck_launch_date',
-    brainDump: 'deck_brain_dump',
-    printerLog: 'deck_printer_log',
-    dailyLog: 'deck_daily_log',
-    dailyReset: 'deck_daily_reset_date',
-    activeDays: 'deck_active_days',
-    streak: 'deck_streak',
-    lastActive: 'deck_last_active',
-    prompt: 'deck_daily_prompt',
-    promptDate: 'deck_prompt_date',
-  };
+const STORAGE_KEY = 'deck_v2';
 
-  let checkState = {};
-  try {
-    checkState = JSON.parse(localStorage.getItem(STORAGE_KEYS.checks) || '{}');
-  } catch(e) { checkState = {}; }
-
-  // ===== DAILY PROMPTS =====
-  const dailyPrompts = [
-    "Film one hand for 30 seconds with the VX.",
-    "Sketch your brand name in 5 different typefaces.",
-    "Call one printer you haven't called yet.",
-    "Visit Sunrise Surf Shop. Just look. Don't pitch.",
-    "Shoot golden hour on A1A.",
-    "Walk Kona with the camera. Don't film. Just watch.",
-    "Buy a Comfort Colors 1717 blank online. Feel it.",
-    "Write 10 brand name candidates. None of them perfect.",
-    "Watch one Bobby Hundreds interview.",
-    "Film your shoes for 60 seconds.",
-    "Find 20 vintage surf graphics on Pinterest tonight.",
-    "Edit yesterday's footage. 30 seconds, 9:16, music.",
-    "Post one frame to your private story. Listen.",
-    "Read one chapter of This Is Not a T-Shirt.",
-    "Walk into a coffee shop with the VX visible. See who notices.",
-    "Spell your top 3 names backwards. Anything new?",
-    "Pick one Florida geographic name. Research its history.",
-    "Shoot 5 minutes at the Jax Pier. No tricks.",
-    "Sketch a graphic with halftones in Procreate.",
-    "Look at the Comfort Colors color chart. Pick your 3.",
-    "Text a skater you respect. Ask what they're shooting on.",
-    "Open the notebook. Write nothing for 2 minutes. Then write.",
-    "Film the drive to the spot.",
-    "Make a moodboard of just typography. No images.",
-    "Find one local kid wearing a tee you love. Ask where.",
-  ];
-
-  const stuckPrompts = [
-    "Pick up the camera and walk outside. Anywhere.",
-    "Sketch the first thing you see.",
-    "Text someone whose taste you trust a question.",
-    "Watch one minute of Mind Field.",
-    "Open Procreate. Make a mark. Stop second-guessing.",
-    "Write your brand name 30 times. Watch which feels right.",
-    "Drive to A1A. Film for 10 minutes. Don't think.",
-    "Call one printer. Just one.",
-    "Look at your Pinterest archive. Pick a favorite. Why?",
-    "Eat. Hydrate. Try again in 30 min.",
-    "Stop. Movement creates clarity. So move.",
-    "Re-read Rule 01.",
-  ];
-
-  // ===== DATE / COUNTDOWN =====
-  function fmtDate(d) {
-    const opts = { weekday: 'long', month: 'long', day: 'numeric' };
-    return d.toLocaleDateString('en-US', opts).toUpperCase();
+const DEFAULT_DATA = {
+  launchDate: null,
+  brainDump: '',
+  printerLog: '',
+  dailyLog: '',
+  activeDays: [],
+  dailyResetDate: null,
+  prompt: null,
+  promptDate: null,
+  sections: {
+    home: [
+      { id: 'list-bt-camera', title: 'Film Something', stamp: 'Camera', stampColor: 'red', tilt: 'l', isDaily: true,
+        items: [
+          { id: 'bt-cam-1', main: 'Test the VX1000 + Powerplay end-to-end', sub: 'Record, transfer, verify SD card workflow', done: false },
+          { id: 'bt-cam-2', main: 'Shoot 10 minutes of B-roll', sub: 'Hands, friends, parking lots, anything', done: false },
+          { id: 'bt-cam-3', main: 'Edit one 30-second clip', sub: 'CapCut, vertical, lo-fi music', done: false },
+        ]},
+      { id: 'list-bt-design', title: 'Make Something', stamp: 'Design', stampColor: 'blue', tilt: 'r', isDaily: true,
+        items: [
+          { id: 'bt-dgn-1', main: 'Sketch in Procreate (15 min minimum)', sub: 'Halftones, wavy type, hand-drawn', done: false },
+          { id: 'bt-dgn-2', main: 'Add 5 references to Pinterest archive', sub: 'Sundek, Birdwell, Ocean Pacific, vintage surf', done: false },
+          { id: 'bt-dgn-3', main: 'Brainstorm 5 new brand names', sub: 'Hyper-local Jax / last name / inside joke', done: false },
+        ]},
+      { id: 'list-bt-talk', title: 'Talk To Someone', stamp: 'Move', stampColor: 'green', tilt: 'l', isDaily: true,
+        items: [
+          { id: 'bt-tlk-1', main: 'Call/visit one local printer', sub: 'Stephens, MLXL, or another verified shop', done: false },
+          { id: 'bt-tlk-2', main: 'DM/show work to 1 person whose taste you trust', sub: 'Friend, local shop kid, older skater', done: false },
+          { id: 'bt-tlk-3', main: 'Visit one local surf/skate shop', sub: 'Sunrise, Aqua East, Sun Dog', done: false },
+        ]}
+    ],
+    today: [
+      { id: 'list-daily-five', title: 'The Daily Five', tilt: 'l', isDaily: true, showProgress: true,
+        items: [
+          { id: 'd-1', main: 'Open the paper notebook', sub: 'Write one idea, sketch, or observation', done: false },
+          { id: 'd-2', main: 'Shoot something with the VX', sub: 'Even 60 seconds counts', done: false },
+          { id: 'd-3', main: 'Sketch or design in Procreate', sub: '15 min minimum, no editing yet', done: false },
+          { id: 'd-4', main: 'Watch one piece of brand inspiration', sub: 'Skate part, brand mini-doc, Seaggs video', done: false },
+          { id: 'd-5', main: 'Do one move that pushes the brand', sub: 'A call, a post, a meet, a sample, a decision', done: false },
+        ]}
+    ],
+    week1: [
+      { id: 'list-w1-unbox', title: 'Unboxing Day', tilt: 'r',
+        items: [
+          { id: 'w1-1', main: 'Save eBay receipt as PDF', done: false },
+          { id: 'w1-2', main: 'Film the unboxing (Reels content)', done: false },
+          { id: 'w1-3', main: 'Test record + playback to SD card', done: false },
+          { id: 'w1-4', main: 'Test fisheye attachment', done: false },
+          { id: 'w1-5', main: 'Verify all batteries hold charge', done: false },
+          { id: 'w1-6', main: 'Note the 60-day warranty start date', done: false },
+          { id: 'w1-7', main: 'Submit PEP reimbursement in EMA', done: false },
+        ]},
+      { id: 'list-w1-shoot', title: 'First Real Shoot', tilt: 'l',
+        items: [
+          { id: 'w1s-1', main: 'Go to Kona, Ed Austin, or local skate spot', done: false },
+          { id: 'w1s-2', main: 'Shoot 3+ tricks from low angles', done: false },
+          { id: 'w1s-3', main: 'Shoot 10 lifestyle B-roll clips (no tricks)', done: false },
+          { id: 'w1s-4', main: 'Transfer footage to Mac', done: false },
+          { id: 'w1s-5', main: "Watch playback. What worked? What didn't?", done: false },
+        ]}
+    ],
+    camera: [
+      { id: 'list-spots-skate', title: 'Skate', tilt: 'l',
+        items: [
+          { id: 'sk-1', main: 'Kona Skatepark', done: false },
+          { id: 'sk-2', main: 'Ed Austin Skatepark', done: false },
+          { id: 'sk-3', main: 'Atlantic Beach side streets', done: false },
+          { id: 'sk-4', main: 'Parking garages downtown (golden hour)', done: false },
+          { id: 'sk-5', main: 'Empty lots with curbs near 3rd St', done: false },
+        ]},
+      { id: 'list-spots-vibe', title: 'Surf / Water / Vibes', tilt: 'r',
+        items: [
+          { id: 'vb-1', main: 'Jax Beach Pier', done: false },
+          { id: 'vb-2', main: 'The Poles', done: false },
+          { id: 'vb-3', main: 'Hanna Park', done: false },
+          { id: 'vb-4', main: 'Vilano Beach jetty', done: false },
+          { id: 'vb-5', main: 'A1A at golden hour', done: false },
+          { id: 'vb-6', main: 'Mayport ferry', done: false },
+          { id: 'vb-7', main: 'Huguenot dunes', done: false },
+          { id: 'vb-8', main: 'Old Florida diners (parking lots)', done: false },
+        ]}
+    ],
+    brand: [
+      { id: 'list-gauntlet', title: 'The Gauntlet', tilt: 'r',
+        items: [
+          { id: 'g-1', main: '.com domain available', sub: "Don't settle for .co or hyphens", done: false },
+          { id: 'g-2', main: 'Instagram handle clean', sub: 'No underscores, no numbers', done: false },
+          { id: 'g-3', main: 'TikTok handle clean', sub: 'Same standard as IG', done: false },
+          { id: 'g-4', main: 'USPTO search clear', sub: 'uspto.gov/trademarks/search', done: false },
+          { id: 'g-5', main: 'Google "[name] clothing" empty', sub: 'Common-law trademark check', done: false },
+        ]},
+      { id: 'list-m1', title: 'Month 1 — Foundation', tilt: 'l',
+        items: [
+          { id: 'm1-1', main: 'Tech stack ordered', sub: 'MacBook, iPad, Procreate, Adobe CC', done: false },
+          { id: 'm1-2', main: 'Paper notebook started, carried daily', done: false },
+          { id: 'm1-3', main: 'Pinterest archive: 200+ vintage references', done: false },
+          { id: 'm1-4', main: '5 graphic sketches in Procreate', done: false },
+          { id: 'm1-5', main: 'Brand name locked + handles claimed', done: false },
+          { id: 'm1-6', main: 'First sketch posted to friends', done: false },
+        ]},
+      { id: 'list-m2', title: 'Month 2 — Art & The Deal', tilt: 'r',
+        items: [
+          { id: 'm2-1', main: '1-2 hero graphics finalized', done: false },
+          { id: 'm2-2', main: 'Tech pack built (Pantone, sizing, placement)', done: false },
+          { id: 'm2-3', main: 'Local printers called + visited', done: false },
+          { id: 'm2-4', main: 'Press proof approved', done: false },
+          { id: 'm2-5', main: '36-shirt run placed', done: false },
+        ]},
+      { id: 'list-m3', title: 'Month 3 — Drop & Streets', tilt: 'l',
+        items: [
+          { id: 'm3-1', main: 'Lookbook shoot at 3+ local spots', done: false },
+          { id: 'm3-2', main: '36 shirts received, every one inspected', done: false },
+          { id: 'm3-3', main: 'Shopify (or alt) store built', done: false },
+          { id: 'm3-4', main: 'Build-in-public content posted', done: false },
+          { id: 'm3-5', main: 'DROP LIVE', done: false },
+          { id: 'm3-6', main: 'Shirts hand-delivered to local shops', done: false },
+        ]}
+    ],
+    print: [
+      { id: 'list-printers', title: 'Printer Calls', tilt: 'l',
+        items: [
+          { id: 'p-1', main: 'Stephens Advertising (Jacksonville)', sub: 'Reportedly does water-based + discharge. First call.', done: false },
+          { id: 'p-2', main: 'MLXL (Jacksonville)', sub: 'Modern production house, water-based ink', done: false },
+          { id: 'p-3', main: 'B&B Screenprinting (Winter Park)', sub: 'Backup. Discharge, 24-piece minimum. 2hr drive.', done: false },
+          { id: 'p-4', main: 'Visit the shop in person', sub: 'Touch sample discharge prints before committing', done: false },
+        ]},
+      { id: 'list-retail', title: 'Shops to Walk Into', tilt: 'r',
+        items: [
+          { id: 'r-1', main: 'Sunrise Surf Shop (Jax Beach)', done: false },
+          { id: 'r-2', main: 'Aqua East Surf Shop', done: false },
+          { id: 'r-3', main: 'Sun Dog (Atlantic Beach)', done: false },
+          { id: 'r-4', main: 'Local skate shops near Kona', done: false },
+          { id: 'r-5', main: 'Independent coffee shops Jax/Atlantic/Neptune', done: false },
+        ]}
+    ],
+    rules: [
+      { id: 'list-mistakes', title: 'Mistakes To Avoid', tilt: 'l',
+        items: [
+          { id: 'mis-1', main: 'Bella+Canvas blanks — wrong fit, wrong feel', done: false },
+          { id: 'mis-2', main: 'Plastisol on vintage designs — kills the illusion', done: false },
+          { id: 'mis-3', main: 'Letting shops upsell DTG', done: false },
+          { id: 'mis-4', main: 'Generic streetwear names ("Apex," "Rogue," "Echo")', done: false },
+          { id: 'mis-5', main: 'Pricing without math (cost × 2.5–4 = retail)', done: false },
+          { id: 'mis-6', main: "Buying a screen printing press (you're a brand-builder)", done: false },
+          { id: 'mis-7', main: 'Planning instead of launching', done: false },
+          { id: 'mis-8', main: 'Trying to please everyone', done: false },
+        ]}
+    ]
   }
+};
 
-  function todayKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  }
+let data;
+try {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  data = stored ? JSON.parse(stored) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+  if (!data.sections) data.sections = JSON.parse(JSON.stringify(DEFAULT_DATA.sections));
+  ['home','today','week1','camera','brand','print','rules'].forEach(s => {
+    if (!data.sections[s]) data.sections[s] = DEFAULT_DATA.sections[s] || [];
+  });
+} catch (e) {
+  data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
 
-  function updateCountdown() {
-    const stored = localStorage.getItem(STORAGE_KEYS.launchDate);
-    const countdownEl = document.getElementById('countdownDays');
-    const displayEl = document.getElementById('launchDateDisplay');
-    if (!stored) {
-      countdownEl.textContent = '90';
-      displayEl.textContent = 'Set your launch date →';
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+function uid(prefix) { return (prefix || 'i') + '-' + Date.now() + '-' + Math.floor(Math.random()*10000); }
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+const dailyPrompts = [
+  "Film one hand for 30 seconds with the VX.",
+  "Sketch your brand name in 5 different typefaces.",
+  "Call one printer you haven't called yet.",
+  "Visit Sunrise Surf Shop. Just look. Don't pitch.",
+  "Shoot golden hour on A1A.",
+  "Walk Kona with the camera. Don't film. Just watch.",
+  "Buy a Comfort Colors 1717 blank online. Feel it.",
+  "Write 10 brand name candidates. None of them perfect.",
+  "Watch one Bobby Hundreds interview.",
+  "Film your shoes for 60 seconds.",
+  "Find 20 vintage surf graphics on Pinterest tonight.",
+  "Edit yesterday's footage. 30 seconds, 9:16, music.",
+  "Post one frame to your private story. Listen.",
+  "Read one chapter of This Is Not a T-Shirt.",
+  "Walk into a coffee shop with the VX visible. See who notices.",
+  "Spell your top 3 names backwards. Anything new?",
+  "Pick one Florida geographic name. Research its history.",
+  "Shoot 5 minutes at the Jax Pier. No tricks.",
+  "Sketch a graphic with halftones in Procreate.",
+  "Look at the Comfort Colors color chart. Pick your 3.",
+  "Text a skater you respect. Ask what they're shooting on.",
+  "Open the notebook. Write nothing for 2 minutes. Then write.",
+  "Film the drive to the spot.",
+  "Make a moodboard of just typography. No images.",
+  "Find one local kid wearing a tee you love. Ask where.",
+];
+
+const stuckPrompts = [
+  "Pick up the camera and walk outside. Anywhere.",
+  "Sketch the first thing you see.",
+  "Text someone whose taste you trust a question.",
+  "Watch one minute of Mind Field.",
+  "Open Procreate. Make a mark. Stop second-guessing.",
+  "Write your brand name 30 times. Watch which feels right.",
+  "Drive to A1A. Film for 10 minutes. Don't think.",
+  "Call one printer. Just one.",
+  "Look at your Pinterest archive. Pick a favorite. Why?",
+  "Eat. Hydrate. Try again in 30 min.",
+  "Stop. Movement creates clarity. So move.",
+  "Re-read Rule 01.",
+];
+
+function fmtDate(d) {
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase();
+}
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function sectionContainerId(sectionKey) {
+  return {
+    home: 'homeListContainer',
+    today: 'todayListContainer',
+    week1: 'week1ListContainer',
+    camera: 'cameraListContainer',
+    brand: 'brandListContainer',
+    print: 'printListContainer',
+    rules: 'rulesListContainer',
+  }[sectionKey];
+}
+
+function findList(sectionKey, listId) {
+  return (data.sections[sectionKey] || []).find(l => l.id === listId);
+}
+function findItem(list, itemId) {
+  return list.items.find(i => i.id === itemId);
+}
+
+function renderItem(item) {
+  const subHtml = item.sub ? `<span class="check-sub">${escapeHtml(item.sub)}</span>` : '';
+  return `
+    <li class="check-item ${item.done ? 'done' : ''}" data-item-id="${item.id}">
+      <div class="check-box" data-action="toggle"></div>
+      <div class="check-content" data-action="toggle">
+        <div class="check-text">${escapeHtml(item.main)}${subHtml}</div>
+      </div>
+      <div class="item-actions">
+        <button class="mini-btn" data-action="edit-item" title="Edit">✎</button>
+        <button class="mini-btn del" data-action="delete-item" title="Delete">×</button>
+      </div>
+    </li>`;
+}
+
+function renderList(list, sectionKey) {
+  const tiltClass = list.tilt === 'r' ? 'tilt-r' : (list.tilt === 'l' ? 'tilt-l' : '');
+  const stampHtml = list.stamp ? `<span class="card-stamp ${list.stampColor && list.stampColor !== 'red' ? list.stampColor : ''}">${escapeHtml(list.stamp)}</span>` : '';
+  const itemsHtml = list.items.map(renderItem).join('');
+  const progressHtml = list.showProgress ? `
+    <div class="progress-wrap"><div class="progress-fill" style="width:0%"></div></div>
+    <div class="progress-text">0 / 0</div>` : '';
+  return `
+    <div class="card ${tiltClass}" data-list-id="${list.id}" data-section="${sectionKey}">
+      ${stampHtml}
+      <div class="card-header">
+        <h3>${escapeHtml(list.title)}</h3>
+        <div class="card-actions">
+          <button class="icon-btn" data-action="edit-title" title="Edit title">✎</button>
+          <button class="icon-btn red" data-action="delete-list" title="Delete list">×</button>
+        </div>
+      </div>
+      <ul class="check-list">${itemsHtml}</ul>
+      ${progressHtml}
+      <div class="add-row">
+        <input class="add-input" type="text" placeholder="Add item..." />
+        <button class="add-btn" data-action="add-item">Add</button>
+      </div>
+    </div>`;
+}
+
+function updateListProgress(cardEl, list) {
+  if (!list.showProgress) return;
+  const done = list.items.filter(i => i.done).length;
+  const total = list.items.length;
+  const pct = total > 0 ? (done/total)*100 : 0;
+  const fill = cardEl.querySelector('.progress-fill');
+  const text = cardEl.querySelector('.progress-text');
+  if (fill) fill.style.width = pct + '%';
+  if (text) text.textContent = `${done} / ${total}`;
+}
+
+function renderSection(sectionKey) {
+  const container = document.getElementById(sectionContainerId(sectionKey));
+  if (!container) return;
+  const lists = data.sections[sectionKey] || [];
+  container.innerHTML = lists.map(l => renderList(l, sectionKey)).join('');
+  // Update progress bars
+  container.querySelectorAll('.card').forEach(card => {
+    const list = findList(sectionKey, card.dataset.listId);
+    if (list && list.showProgress) updateListProgress(card, list);
+  });
+}
+
+function renderAll() {
+  ['home','today','week1','camera','brand','print','rules'].forEach(renderSection);
+  updateStats();
+}
+
+// ===== INTERACTIONS =====
+document.body.addEventListener('click', (e) => {
+  const actionEl = e.target.closest('[data-action]');
+  if (!actionEl) return;
+  const action = actionEl.dataset.action;
+  const card = actionEl.closest('.card');
+  if (!card) return;
+  const sectionKey = card.dataset.section;
+  const listId = card.dataset.listId;
+  const list = findList(sectionKey, listId);
+  if (!list) return;
+
+  const li = actionEl.closest('.check-item');
+  if (li) {
+    const itemId = li.dataset.itemId;
+    const item = findItem(list, itemId);
+    if (!item) return;
+    if (action === 'toggle') {
+      item.done = !item.done;
+      li.classList.toggle('done');
+      save();
+      recordActivity();
+      if (list.showProgress) updateListProgress(card, list);
+      updateStats();
       return;
     }
-    const launch = new Date(stored + 'T00:00:00');
-    const now = new Date();
-    now.setHours(0,0,0,0);
-    const diff = Math.ceil((launch - now) / (1000*60*60*24));
-    if (diff < 0) {
-      countdownEl.textContent = 'GO';
-      countdownEl.style.color = 'var(--green)';
-      displayEl.textContent = `Launched ${Math.abs(diff)} days ago`;
-    } else {
-      countdownEl.textContent = diff;
-      countdownEl.style.color = diff <= 14 ? 'var(--red)' : (diff <= 30 ? 'var(--yellow)' : 'var(--red)');
-      const formatted = launch.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      displayEl.textContent = `Drop: ${formatted}`;
+    if (action === 'edit-item') {
+      e.stopPropagation();
+      openItemModal(sectionKey, listId, itemId);
+      return;
     }
-  }
-
-  document.getElementById('setLaunchBtn').addEventListener('click', () => {
-    const input = document.getElementById('launchDateInput');
-    if (input.value) {
-      localStorage.setItem(STORAGE_KEYS.launchDate, input.value);
-      updateCountdown();
-    }
-  });
-
-  // Pre-populate launch input
-  const storedLaunch = localStorage.getItem(STORAGE_KEYS.launchDate);
-  if (storedLaunch) {
-    document.getElementById('launchDateInput').value = storedLaunch;
-  } else {
-    const def = new Date();
-    def.setDate(def.getDate() + 90);
-    document.getElementById('launchDateInput').value = def.toISOString().split('T')[0];
-  }
-
-  // ===== TABS =====
-  const tabs = document.querySelectorAll('.tab');
-  const sections = document.querySelectorAll('.section');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.section;
-      tabs.forEach(t => t.classList.remove('active'));
-      sections.forEach(s => s.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelector(`.section[data-section="${target}"]`).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  });
-
-  // ===== CHECKLISTS =====
-  function applyCheckState() {
-    document.querySelectorAll('.check-item').forEach(item => {
-      if (item.classList.contains('static-list')) return;
-      const id = item.dataset.id;
-      if (id && checkState[id]) {
-        item.classList.add('done');
-      } else {
-        item.classList.remove('done');
+    if (action === 'delete-item') {
+      e.stopPropagation();
+      if (confirm('Delete this item?')) {
+        list.items = list.items.filter(i => i.id !== itemId);
+        save();
+        renderSection(sectionKey);
+        updateStats();
       }
-    });
-    updateDailyProgress();
-    updateStats();
+      return;
+    }
   }
 
-  function toggleCheck(id) {
-    checkState[id] = !checkState[id];
-    localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkState));
-    applyCheckState();
+  if (action === 'add-item') {
+    const input = card.querySelector('.add-row .add-input');
+    const val = input.value.trim();
+    if (!val) return;
+    list.items.push({ id: uid('it'), main: val, done: false });
+    save();
+    renderSection(sectionKey);
     recordActivity();
+    return;
   }
+  if (action === 'edit-title') {
+    const newTitle = prompt('Edit list title:', list.title);
+    if (newTitle !== null && newTitle.trim()) {
+      list.title = newTitle.trim();
+      save();
+      renderSection(sectionKey);
+    }
+    return;
+  }
+  if (action === 'delete-list') {
+    if (confirm(`Delete entire list "${list.title}"?`)) {
+      data.sections[sectionKey] = data.sections[sectionKey].filter(l => l.id !== listId);
+      save();
+      renderSection(sectionKey);
+      updateStats();
+    }
+    return;
+  }
+});
 
-  document.querySelectorAll('.check-item').forEach(item => {
-    if (item.classList.contains('static-list')) return;
-    item.addEventListener('click', (e) => {
-      const id = item.dataset.id;
-      if (!id) return;
-      toggleCheck(id);
+// Enter to add
+document.body.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  if (!e.target.classList || !e.target.classList.contains('add-input')) return;
+  e.preventDefault();
+  const card = e.target.closest('.card');
+  if (!card) return;
+  if (card.classList.contains('add-list-card')) {
+    const btn = card.querySelector('.add-btn');
+    if (btn) btn.click();
+  } else {
+    const btn = card.querySelector('[data-action="add-item"]');
+    if (btn) btn.click();
+  }
+});
+
+// Add-new-list buttons
+document.querySelectorAll('[data-add-list]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const sectionKey = btn.dataset.addList;
+    const input = btn.parentElement.querySelector('.add-input');
+    const val = input.value.trim();
+    if (!val) return;
+    data.sections[sectionKey].push({
+      id: uid('list'),
+      title: val,
+      tilt: Math.random() > 0.5 ? 'l' : 'r',
+      items: []
     });
+    save();
+    input.value = '';
+    renderSection(sectionKey);
   });
+});
 
-  // ===== DAILY RESET =====
-  function maybeResetDaily() {
-    const today = todayKey();
-    const lastReset = localStorage.getItem(STORAGE_KEYS.dailyReset);
-    if (lastReset !== today) {
-      ['d-1','d-2','d-3','d-4','d-5','bt-cam-1','bt-cam-2','bt-cam-3','bt-dgn-1','bt-dgn-2','bt-dgn-3','bt-tlk-1','bt-tlk-2','bt-tlk-3'].forEach(id => {
-        delete checkState[id];
+// ===== MODAL =====
+const modalBg = document.getElementById('modalBg');
+const modalMain = document.getElementById('modalMain');
+const modalSub = document.getElementById('modalSub');
+let modalContext = null;
+
+function openItemModal(sectionKey, listId, itemId) {
+  const list = findList(sectionKey, listId);
+  const item = findItem(list, itemId);
+  if (!item) return;
+  modalContext = { sectionKey, listId, itemId };
+  modalMain.value = item.main || '';
+  modalSub.value = item.sub || '';
+  modalBg.classList.add('show');
+  setTimeout(() => modalMain.focus(), 50);
+}
+
+document.getElementById('modalSave').addEventListener('click', () => {
+  if (!modalContext) return;
+  const list = findList(modalContext.sectionKey, modalContext.listId);
+  const item = findItem(list, modalContext.itemId);
+  if (item) {
+    if (modalMain.value.trim()) item.main = modalMain.value.trim();
+    item.sub = modalSub.value.trim();
+    save();
+    renderSection(modalContext.sectionKey);
+  }
+  closeModal();
+});
+
+document.getElementById('modalDelete').addEventListener('click', () => {
+  if (!modalContext) return;
+  if (!confirm('Delete this item?')) return;
+  const list = findList(modalContext.sectionKey, modalContext.listId);
+  list.items = list.items.filter(i => i.id !== modalContext.itemId);
+  save();
+  renderSection(modalContext.sectionKey);
+  updateStats();
+  closeModal();
+});
+
+document.getElementById('modalCancel').addEventListener('click', closeModal);
+modalBg.addEventListener('click', (e) => { if (e.target === modalBg) closeModal(); });
+
+function closeModal() {
+  modalBg.classList.remove('show');
+  modalContext = null;
+}
+
+// ===== LAUNCH COUNTDOWN =====
+function updateCountdown() {
+  const countdownEl = document.getElementById('countdownDays');
+  const displayEl = document.getElementById('launchDateDisplay');
+  if (!data.launchDate) {
+    countdownEl.textContent = '90';
+    displayEl.textContent = 'Set your launch date →';
+    return;
+  }
+  const launch = new Date(data.launchDate + 'T00:00:00');
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  const diff = Math.ceil((launch - now) / (1000*60*60*24));
+  if (diff < 0) {
+    countdownEl.textContent = 'GO';
+    countdownEl.style.color = 'var(--green)';
+    displayEl.textContent = `Launched ${Math.abs(diff)} days ago`;
+  } else {
+    countdownEl.textContent = diff;
+    countdownEl.style.color = diff <= 14 ? 'var(--red)' : (diff <= 30 ? 'var(--yellow)' : 'var(--red)');
+    displayEl.textContent = `Drop: ${launch.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+  }
+}
+
+document.getElementById('setLaunchBtn').addEventListener('click', () => {
+  const input = document.getElementById('launchDateInput');
+  if (input.value) {
+    data.launchDate = input.value;
+    save();
+    updateCountdown();
+  }
+});
+
+if (data.launchDate) {
+  document.getElementById('launchDateInput').value = data.launchDate;
+} else {
+  const def = new Date();
+  def.setDate(def.getDate() + 90);
+  document.getElementById('launchDateInput').value = def.toISOString().split('T')[0];
+}
+
+// ===== TABS =====
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.section;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelector(`.section[data-section="${target}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// ===== DAILY RESET =====
+function maybeResetDaily() {
+  const today = todayKey();
+  if (data.dailyResetDate !== today) {
+    Object.values(data.sections).forEach(lists => {
+      lists.forEach(list => {
+        if (list.isDaily) list.items.forEach(item => item.done = false);
       });
-      localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkState));
-      localStorage.setItem(STORAGE_KEYS.dailyReset, today);
-    }
-  }
-
-  document.getElementById('resetDailyBtn').addEventListener('click', () => {
-    ['d-1','d-2','d-3','d-4','d-5'].forEach(id => { delete checkState[id]; });
-    localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(checkState));
-    applyCheckState();
-  });
-
-  // ===== DAILY PROGRESS =====
-  function updateDailyProgress() {
-    const dailyIds = ['d-1','d-2','d-3','d-4','d-5'];
-    const done = dailyIds.filter(id => checkState[id]).length;
-    const pct = (done / dailyIds.length) * 100;
-    const fill = document.getElementById('dailyProgress');
-    const txt = document.getElementById('dailyProgressText');
-    if (fill) fill.style.width = pct + '%';
-    if (txt) txt.textContent = `${done} / ${dailyIds.length}`;
-  }
-
-  // ===== STATS / STREAK =====
-  function updateStats() {
-    const total = Object.values(checkState).filter(v => v).length;
-    document.getElementById('totalChecks').textContent = total;
-
-    const activeDaysList = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeDays) || '[]');
-    document.getElementById('totalDays').textContent = activeDaysList.length;
-
-    // Streak calculation
-    const sortedDays = [...activeDaysList].sort();
-    let streak = 0;
-    const today = todayKey();
-    let cursor = new Date();
-    cursor.setHours(0,0,0,0);
-    while (true) {
-      const key = `${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,'0')}-${String(cursor.getDate()).padStart(2,'0')}`;
-      if (sortedDays.includes(key)) {
-        streak++;
-        cursor.setDate(cursor.getDate() - 1);
-      } else {
-        break;
-      }
-    }
-    document.getElementById('streakDays').textContent = streak;
-  }
-
-  function recordActivity() {
-    const today = todayKey();
-    const activeDaysList = JSON.parse(localStorage.getItem(STORAGE_KEYS.activeDays) || '[]');
-    if (!activeDaysList.includes(today)) {
-      activeDaysList.push(today);
-      localStorage.setItem(STORAGE_KEYS.activeDays, JSON.stringify(activeDaysList));
-    }
-    updateStats();
-  }
-
-  // ===== PROMPTS =====
-  function pickPrompt() {
-    const today = todayKey();
-    const storedDate = localStorage.getItem(STORAGE_KEYS.promptDate);
-    if (storedDate === today) {
-      const stored = localStorage.getItem(STORAGE_KEYS.prompt);
-      if (stored) {
-        document.getElementById('dailyPrompt').textContent = stored;
-        return;
-      }
-    }
-    const pick = dailyPrompts[Math.floor(Math.random() * dailyPrompts.length)];
-    document.getElementById('dailyPrompt').textContent = pick;
-    localStorage.setItem(STORAGE_KEYS.prompt, pick);
-    localStorage.setItem(STORAGE_KEYS.promptDate, today);
-  }
-
-  document.getElementById('rerollBtn').addEventListener('click', () => {
-    const pick = dailyPrompts[Math.floor(Math.random() * dailyPrompts.length)];
-    document.getElementById('dailyPrompt').textContent = pick;
-    localStorage.setItem(STORAGE_KEYS.prompt, pick);
-    localStorage.setItem(STORAGE_KEYS.promptDate, todayKey());
-  });
-
-  function pickStuckPrompt() {
-    const pick = stuckPrompts[Math.floor(Math.random() * stuckPrompts.length)];
-    document.getElementById('stuckPrompt').textContent = pick;
-  }
-
-  document.getElementById('stuckReroll').addEventListener('click', pickStuckPrompt);
-
-  // ===== TEXTAREAS / NOTES =====
-  function bindTextarea(elId, key, msgId) {
-    const el = document.getElementById(elId);
-    const msg = document.getElementById(msgId);
-    el.value = localStorage.getItem(key) || '';
-    let timer;
-    el.addEventListener('input', () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        localStorage.setItem(key, el.value);
-        if (msg) {
-          msg.classList.add('show');
-          setTimeout(() => msg.classList.remove('show'), 1200);
-        }
-        recordActivity();
-      }, 400);
     });
+    data.dailyResetDate = today;
+    save();
   }
+}
 
-  bindTextarea('brainDump', STORAGE_KEYS.brainDump, 'saveMsg');
-  bindTextarea('printerLog', STORAGE_KEYS.printerLog, 'saveMsg2');
-  bindTextarea('dailyLog', STORAGE_KEYS.dailyLog, 'saveMsg3');
+document.getElementById('resetDailyBtn').addEventListener('click', () => {
+  if (!confirm('Reset all daily checklists?')) return;
+  Object.values(data.sections).forEach(lists => {
+    lists.forEach(list => {
+      if (list.isDaily) list.items.forEach(item => item.done = false);
+    });
+  });
+  save();
+  renderAll();
+});
 
-  // ===== HEADER DATE =====
-  document.getElementById('dateLabel').textContent = fmtDate(new Date());
+// ===== STATS =====
+function updateStats() {
+  let total = 0;
+  Object.values(data.sections).forEach(lists => {
+    lists.forEach(list => { total += list.items.filter(i => i.done).length; });
+  });
+  document.getElementById('totalChecks').textContent = total;
+  document.getElementById('totalDays').textContent = (data.activeDays || []).length;
 
-  // ===== INIT =====
-  maybeResetDaily();
-  applyCheckState();
-  updateCountdown();
-  pickPrompt();
-  pickStuckPrompt();
+  const sortedDays = [...(data.activeDays || [])].sort();
+  let streak = 0;
+  let cursor = new Date();
+  cursor.setHours(0,0,0,0);
+  while (true) {
+    const key = `${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,'0')}-${String(cursor.getDate()).padStart(2,'0')}`;
+    if (sortedDays.includes(key)) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    } else break;
+  }
+  document.getElementById('streakDays').textContent = streak;
+}
 
-  // Auto-record activity on any interaction with the page
-  let activityRecorded = false;
-  document.addEventListener('click', () => {
-    if (!activityRecorded) {
+function recordActivity() {
+  const today = todayKey();
+  if (!data.activeDays) data.activeDays = [];
+  if (!data.activeDays.includes(today)) {
+    data.activeDays.push(today);
+    save();
+  }
+  updateStats();
+}
+
+// ===== PROMPTS =====
+function pickPrompt() {
+  const today = todayKey();
+  if (data.promptDate === today && data.prompt) {
+    document.getElementById('dailyPrompt').textContent = data.prompt;
+    return;
+  }
+  const pick = dailyPrompts[Math.floor(Math.random() * dailyPrompts.length)];
+  document.getElementById('dailyPrompt').textContent = pick;
+  data.prompt = pick;
+  data.promptDate = today;
+  save();
+}
+
+document.getElementById('rerollBtn').addEventListener('click', () => {
+  const pick = dailyPrompts[Math.floor(Math.random() * dailyPrompts.length)];
+  document.getElementById('dailyPrompt').textContent = pick;
+  data.prompt = pick;
+  data.promptDate = todayKey();
+  save();
+});
+
+function pickStuckPrompt() {
+  document.getElementById('stuckPrompt').textContent = stuckPrompts[Math.floor(Math.random() * stuckPrompts.length)];
+}
+document.getElementById('stuckReroll').addEventListener('click', pickStuckPrompt);
+
+// ===== TEXTAREAS =====
+function bindTextarea(elId, dataKey, msgId) {
+  const el = document.getElementById(elId);
+  const msg = document.getElementById(msgId);
+  el.value = data[dataKey] || '';
+  let timer;
+  el.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      data[dataKey] = el.value;
+      save();
+      if (msg) {
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 1200);
+      }
       recordActivity();
-      activityRecorded = true;
+    }, 400);
+  });
+}
+
+bindTextarea('brainDump', 'brainDump', 'saveMsg');
+bindTextarea('printerLog', 'printerLog', 'saveMsg2');
+bindTextarea('dailyLog', 'dailyLog', 'saveMsg3');
+
+// ===== EXPORT / IMPORT =====
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `the-deck-backup-${todayKey()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+
+document.getElementById('importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if (!confirm('Replace all current data with imported backup?')) return;
+      data = imported;
+      save();
+      renderAll();
+      updateCountdown();
+      pickPrompt();
+      document.getElementById('brainDump').value = data.brainDump || '';
+      document.getElementById('printerLog').value = data.printerLog || '';
+      document.getElementById('dailyLog').value = data.dailyLog || '';
+      alert('Backup restored.');
+    } catch (err) {
+      alert('Invalid backup file.');
     }
-  }, { once: false });
+  };
+  reader.readAsText(file);
+});
+
+// ===== INIT =====
+document.getElementById('dateLabel').textContent = fmtDate(new Date());
+maybeResetDaily();
+renderAll();
+updateCountdown();
+pickPrompt();
+pickStuckPrompt();
+recordActivity();
 </script>
 
 </body>
